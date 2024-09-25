@@ -10,11 +10,11 @@ message UsageRecord {
   string organization = 3;
   string project = 4;
 
-  int64 timestamp = 5;
-  int32 latency_ms = 6;
+  string api_method = 5;
+  int32 status_code = 6;
 
-  string api_method = 7;
-  int32 status_code = 8;
+  int64 timestamp = 7;
+  int32 latency_ms = 8;
 }
 
 message CollectUsageRequest {

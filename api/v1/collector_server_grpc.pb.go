@@ -19,89 +19,89 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	APIUsageCollector_SendAPIUsage_FullMethodName = "/llmariner.apiusage.server.v1.APIUsageCollector/SendAPIUsage"
+	CollectonService_CollectUsage_FullMethodName = "/llmariner.apiusage.server.v1.CollectonService/CollectUsage"
 )
 
-// APIUsageCollectorClient is the client API for APIUsageCollector service.
+// CollectonServiceClient is the client API for CollectonService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type APIUsageCollectorClient interface {
-	SendAPIUsage(ctx context.Context, in *APIUsage, opts ...grpc.CallOption) (*SendAPIUsageResponse, error)
+type CollectonServiceClient interface {
+	CollectUsage(ctx context.Context, in *CollectUsageRequest, opts ...grpc.CallOption) (*CollectUsageResponse, error)
 }
 
-type aPIUsageCollectorClient struct {
+type collectonServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAPIUsageCollectorClient(cc grpc.ClientConnInterface) APIUsageCollectorClient {
-	return &aPIUsageCollectorClient{cc}
+func NewCollectonServiceClient(cc grpc.ClientConnInterface) CollectonServiceClient {
+	return &collectonServiceClient{cc}
 }
 
-func (c *aPIUsageCollectorClient) SendAPIUsage(ctx context.Context, in *APIUsage, opts ...grpc.CallOption) (*SendAPIUsageResponse, error) {
-	out := new(SendAPIUsageResponse)
-	err := c.cc.Invoke(ctx, APIUsageCollector_SendAPIUsage_FullMethodName, in, out, opts...)
+func (c *collectonServiceClient) CollectUsage(ctx context.Context, in *CollectUsageRequest, opts ...grpc.CallOption) (*CollectUsageResponse, error) {
+	out := new(CollectUsageResponse)
+	err := c.cc.Invoke(ctx, CollectonService_CollectUsage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// APIUsageCollectorServer is the server API for APIUsageCollector service.
-// All implementations must embed UnimplementedAPIUsageCollectorServer
+// CollectonServiceServer is the server API for CollectonService service.
+// All implementations must embed UnimplementedCollectonServiceServer
 // for forward compatibility
-type APIUsageCollectorServer interface {
-	SendAPIUsage(context.Context, *APIUsage) (*SendAPIUsageResponse, error)
-	mustEmbedUnimplementedAPIUsageCollectorServer()
+type CollectonServiceServer interface {
+	CollectUsage(context.Context, *CollectUsageRequest) (*CollectUsageResponse, error)
+	mustEmbedUnimplementedCollectonServiceServer()
 }
 
-// UnimplementedAPIUsageCollectorServer must be embedded to have forward compatible implementations.
-type UnimplementedAPIUsageCollectorServer struct {
+// UnimplementedCollectonServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCollectonServiceServer struct {
 }
 
-func (UnimplementedAPIUsageCollectorServer) SendAPIUsage(context.Context, *APIUsage) (*SendAPIUsageResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendAPIUsage not implemented")
+func (UnimplementedCollectonServiceServer) CollectUsage(context.Context, *CollectUsageRequest) (*CollectUsageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CollectUsage not implemented")
 }
-func (UnimplementedAPIUsageCollectorServer) mustEmbedUnimplementedAPIUsageCollectorServer() {}
+func (UnimplementedCollectonServiceServer) mustEmbedUnimplementedCollectonServiceServer() {}
 
-// UnsafeAPIUsageCollectorServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to APIUsageCollectorServer will
+// UnsafeCollectonServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CollectonServiceServer will
 // result in compilation errors.
-type UnsafeAPIUsageCollectorServer interface {
-	mustEmbedUnimplementedAPIUsageCollectorServer()
+type UnsafeCollectonServiceServer interface {
+	mustEmbedUnimplementedCollectonServiceServer()
 }
 
-func RegisterAPIUsageCollectorServer(s grpc.ServiceRegistrar, srv APIUsageCollectorServer) {
-	s.RegisterService(&APIUsageCollector_ServiceDesc, srv)
+func RegisterCollectonServiceServer(s grpc.ServiceRegistrar, srv CollectonServiceServer) {
+	s.RegisterService(&CollectonService_ServiceDesc, srv)
 }
 
-func _APIUsageCollector_SendAPIUsage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(APIUsage)
+func _CollectonService_CollectUsage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CollectUsageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(APIUsageCollectorServer).SendAPIUsage(ctx, in)
+		return srv.(CollectonServiceServer).CollectUsage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: APIUsageCollector_SendAPIUsage_FullMethodName,
+		FullMethod: CollectonService_CollectUsage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(APIUsageCollectorServer).SendAPIUsage(ctx, req.(*APIUsage))
+		return srv.(CollectonServiceServer).CollectUsage(ctx, req.(*CollectUsageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// APIUsageCollector_ServiceDesc is the grpc.ServiceDesc for APIUsageCollector service.
+// CollectonService_ServiceDesc is the grpc.ServiceDesc for CollectonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var APIUsageCollector_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmariner.apiusage.server.v1.APIUsageCollector",
-	HandlerType: (*APIUsageCollectorServer)(nil),
+var CollectonService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "llmariner.apiusage.server.v1.CollectonService",
+	HandlerType: (*CollectonServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendAPIUsage",
-			Handler:    _APIUsageCollector_SendAPIUsage_Handler,
+			MethodName: "CollectUsage",
+			Handler:    _CollectonService_CollectUsage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

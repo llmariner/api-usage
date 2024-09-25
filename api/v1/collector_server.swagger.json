@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "APIUsageCollector"
+      "name": "CollectonService"
     }
   ],
   "consumes": [
@@ -45,7 +45,7 @@
         }
       }
     },
-    "v1SendAPIUsageResponse": {
+    "v1CollectUsageResponse": {
       "type": "object"
     },
     "v1UsageRecord": {
@@ -63,18 +63,18 @@
         "project": {
           "type": "string"
         },
+        "apiMethod": {
+          "type": "string"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
+        },
         "timestamp": {
           "type": "string",
           "format": "int64"
         },
         "latencyMs": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "apiMethod": {
-          "type": "string"
-        },
-        "statusCode": {
           "type": "integer",
           "format": "int32"
         }
