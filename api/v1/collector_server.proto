@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package llmariner.apiusage.server.v1;
+
+option go_package = "github.com/llmariner/api-usage/api/v1";
+
+message UsageRecord {
+  string user = 1;
+  string tenant = 2;
+  string organization = 3;
+  string project = 4;
+
+  int64 timestamp = 5;
+  int32 latency_ms = 6;
+
+  string api_method = 7;
+  int32 status_code = 8;
+}
+
+message CollectUsageRequest {
+  repeated UsageRecord records = 1;
+}
+
+message CollectUsageResponse {}
+
+service CollectonService {
+  rpc CollectUsage(CollectUsageRequest) returns (CollectUsageResponse);
+}
