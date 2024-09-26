@@ -14,86 +14,87 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// CollectionServiceClient is the client API for CollectionService service.
+// CollectionInternalServiceClient is the client API for CollectionInternalService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CollectionServiceClient interface {
+type CollectionInternalServiceClient interface {
 	CollectUsage(ctx context.Context, in *CollectUsageRequest, opts ...grpc.CallOption) (*CollectUsageResponse, error)
 }
 
-type collectionServiceClient struct {
+type collectionInternalServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCollectionServiceClient(cc grpc.ClientConnInterface) CollectionServiceClient {
-	return &collectionServiceClient{cc}
+func NewCollectionInternalServiceClient(cc grpc.ClientConnInterface) CollectionInternalServiceClient {
+	return &collectionInternalServiceClient{cc}
 }
 
-func (c *collectionServiceClient) CollectUsage(ctx context.Context, in *CollectUsageRequest, opts ...grpc.CallOption) (*CollectUsageResponse, error) {
+func (c *collectionInternalServiceClient) CollectUsage(ctx context.Context, in *CollectUsageRequest, opts ...grpc.CallOption) (*CollectUsageResponse, error) {
 	out := new(CollectUsageResponse)
-	err := c.cc.Invoke(ctx, "/llmariner.apiusage.server.v1.CollectionService/CollectUsage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.apiusage.server.v1.CollectionInternalService/CollectUsage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CollectionServiceServer is the server API for CollectionService service.
-// All implementations must embed UnimplementedCollectionServiceServer
+// CollectionInternalServiceServer is the server API for CollectionInternalService service.
+// All implementations must embed UnimplementedCollectionInternalServiceServer
 // for forward compatibility
-type CollectionServiceServer interface {
+type CollectionInternalServiceServer interface {
 	CollectUsage(context.Context, *CollectUsageRequest) (*CollectUsageResponse, error)
-	mustEmbedUnimplementedCollectionServiceServer()
+	mustEmbedUnimplementedCollectionInternalServiceServer()
 }
 
-// UnimplementedCollectionServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedCollectionServiceServer struct {
+// UnimplementedCollectionInternalServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCollectionInternalServiceServer struct {
 }
 
-func (UnimplementedCollectionServiceServer) CollectUsage(context.Context, *CollectUsageRequest) (*CollectUsageResponse, error) {
+func (UnimplementedCollectionInternalServiceServer) CollectUsage(context.Context, *CollectUsageRequest) (*CollectUsageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CollectUsage not implemented")
 }
-func (UnimplementedCollectionServiceServer) mustEmbedUnimplementedCollectionServiceServer() {}
+func (UnimplementedCollectionInternalServiceServer) mustEmbedUnimplementedCollectionInternalServiceServer() {
+}
 
-// UnsafeCollectionServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CollectionServiceServer will
+// UnsafeCollectionInternalServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CollectionInternalServiceServer will
 // result in compilation errors.
-type UnsafeCollectionServiceServer interface {
-	mustEmbedUnimplementedCollectionServiceServer()
+type UnsafeCollectionInternalServiceServer interface {
+	mustEmbedUnimplementedCollectionInternalServiceServer()
 }
 
-func RegisterCollectionServiceServer(s grpc.ServiceRegistrar, srv CollectionServiceServer) {
-	s.RegisterService(&CollectionService_ServiceDesc, srv)
+func RegisterCollectionInternalServiceServer(s grpc.ServiceRegistrar, srv CollectionInternalServiceServer) {
+	s.RegisterService(&CollectionInternalService_ServiceDesc, srv)
 }
 
-func _CollectionService_CollectUsage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CollectionInternalService_CollectUsage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CollectUsageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CollectionServiceServer).CollectUsage(ctx, in)
+		return srv.(CollectionInternalServiceServer).CollectUsage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmariner.apiusage.server.v1.CollectionService/CollectUsage",
+		FullMethod: "/llmariner.apiusage.server.v1.CollectionInternalService/CollectUsage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CollectionServiceServer).CollectUsage(ctx, req.(*CollectUsageRequest))
+		return srv.(CollectionInternalServiceServer).CollectUsage(ctx, req.(*CollectUsageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CollectionService_ServiceDesc is the grpc.ServiceDesc for CollectionService service.
+// CollectionInternalService_ServiceDesc is the grpc.ServiceDesc for CollectionInternalService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CollectionService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmariner.apiusage.server.v1.CollectionService",
-	HandlerType: (*CollectionServiceServer)(nil),
+var CollectionInternalService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "llmariner.apiusage.server.v1.CollectionInternalService",
+	HandlerType: (*CollectionInternalServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CollectUsage",
-			Handler:    _CollectionService_CollectUsage_Handler,
+			Handler:    _CollectionInternalService_CollectUsage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
