@@ -24,6 +24,10 @@ func TestCollectUsage(t *testing.T) {
 		})
 	}
 	srv := New(st, testr.New(t))
-	_, err := srv.CollectUsage(context.Background(), &v1.CollectUsageRequest{Records: records})
+	ctx := context.Background()
+
+	_, err := srv.CollectUsage(ctx, &v1.CollectUsageRequest{Records: records})
 	assert.NoError(t, err)
+	_, err = srv.CollectUsage(ctx, &v1.CollectUsageRequest{Records: records})
+	assert.Error(t, err)
 }

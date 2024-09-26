@@ -6,14 +6,14 @@ import "gorm.io/gorm"
 type Usage struct {
 	gorm.Model
 
-	User         string
+	User         string `gorm:"uniqueIndex:idx_user_ts"`
 	Tenant       string
 	Organization string
 	Project      string
 
 	APIMethod  string
 	StatusCode int32
-	Timestamp  int64
+	Timestamp  int64 `gorm:"uniqueIndex:idx_user_ts"`
 	LatencyMS  int32
 }
 
