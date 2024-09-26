@@ -45,7 +45,7 @@
         }
       }
     },
-    "v1CreateUsageResponse": {
+    "v1Usage": {
       "type": "object"
     },
     "v1UsageRecord": {

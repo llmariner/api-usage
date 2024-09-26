@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CollectionInternalServiceClient interface {
-	CreateUsage(ctx context.Context, in *CreateUsageRequest, opts ...grpc.CallOption) (*CreateUsageResponse, error)
+	CreateUsage(ctx context.Context, in *CreateUsageRequest, opts ...grpc.CallOption) (*Usage, error)
 }
 
 type collectionInternalServiceClient struct {
@@ -37,8 +37,8 @@ func NewCollectionInternalServiceClient(cc grpc.ClientConnInterface) CollectionI
 	return &collectionInternalServiceClient{cc}
 }
 
-func (c *collectionInternalServiceClient) CreateUsage(ctx context.Context, in *CreateUsageRequest, opts ...grpc.CallOption) (*CreateUsageResponse, error) {
-	out := new(CreateUsageResponse)
+func (c *collectionInternalServiceClient) CreateUsage(ctx context.Context, in *CreateUsageRequest, opts ...grpc.CallOption) (*Usage, error) {
+	out := new(Usage)
 	err := c.cc.Invoke(ctx, CollectionInternalService_CreateUsage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (c *collectionInternalServiceClient) CreateUsage(ctx context.Context, in *C
 // All implementations must embed UnimplementedCollectionInternalServiceServer
 // for forward compatibility
 type CollectionInternalServiceServer interface {
-	CreateUsage(context.Context, *CreateUsageRequest) (*CreateUsageResponse, error)
+	CreateUsage(context.Context, *CreateUsageRequest) (*Usage, error)
 	mustEmbedUnimplementedCollectionInternalServiceServer()
 }
 
@@ -58,7 +58,7 @@ type CollectionInternalServiceServer interface {
 type UnimplementedCollectionInternalServiceServer struct {
 }
 
-func (UnimplementedCollectionInternalServiceServer) CreateUsage(context.Context, *CreateUsageRequest) (*CreateUsageResponse, error) {
+func (UnimplementedCollectionInternalServiceServer) CreateUsage(context.Context, *CreateUsageRequest) (*Usage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUsage not implemented")
 }
 func (UnimplementedCollectionInternalServiceServer) mustEmbedUnimplementedCollectionInternalServiceServer() {

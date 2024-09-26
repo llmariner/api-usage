@@ -57,7 +57,7 @@ func (s *Server) Run(ctx context.Context, port int) error {
 }
 
 // CreateUsage creates usage.
-func (s *Server) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest) (*v1.CreateUsageResponse, error) {
+func (s *Server) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest) (*v1.Usage, error) {
 	s.logger.V(4).WithName("api").Info("CreateUsage", "count", len(req.Records))
 	// TODO: add authentication
 
@@ -78,5 +78,5 @@ func (s *Server) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest) (*
 		return nil, status.Errorf(codes.Internal, "create usage: %s", err)
 	}
 
-	return &v1.CreateUsageResponse{}, nil
+	return &v1.Usage{}, nil
 }

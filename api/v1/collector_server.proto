@@ -21,8 +21,8 @@ message CreateUsageRequest {
   repeated UsageRecord records = 1;
 }
 
-message CreateUsageResponse {}
+message Usage {}
 
 service CollectionInternalService {
-  rpc CreateUsage(CreateUsageRequest) returns (CreateUsageResponse);
+  rpc CreateUsage(CreateUsageRequest) returns (Usage);
 }
