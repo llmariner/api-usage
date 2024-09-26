@@ -40,8 +40,8 @@ type fakeCollectonServiceClient struct {
 	totalRecords int
 }
 
-func (c *fakeCollectonServiceClient) CollectUsage(ctx context.Context, req *v1.CollectUsageRequest, opts ...grpc.CallOption) (*v1.CollectUsageResponse, error) {
+func (c *fakeCollectonServiceClient) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest, opts ...grpc.CallOption) (*v1.Usage, error) {
 	c.counter++
 	c.totalRecords += len(req.Records)
-	return &v1.CollectUsageResponse{}, nil
+	return &v1.Usage{}, nil
 }

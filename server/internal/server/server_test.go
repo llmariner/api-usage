@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCollectUsage(t *testing.T) {
+func TestCreateUsage(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
@@ -26,8 +26,8 @@ func TestCollectUsage(t *testing.T) {
 	srv := New(st, testr.New(t))
 	ctx := context.Background()
 
-	_, err := srv.CollectUsage(ctx, &v1.CollectUsageRequest{Records: records})
+	_, err := srv.CreateUsage(ctx, &v1.CreateUsageRequest{Records: records})
 	assert.NoError(t, err)
-	_, err = srv.CollectUsage(ctx, &v1.CollectUsageRequest{Records: records})
+	_, err = srv.CreateUsage(ctx, &v1.CreateUsageRequest{Records: records})
 	assert.Error(t, err)
 }

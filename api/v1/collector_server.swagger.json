@@ -39,12 +39,13 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
       }
     },
-    "v1CollectUsageResponse": {
+    "v1Usage": {
       "type": "object"
     },
     "v1UsageRecord": {
