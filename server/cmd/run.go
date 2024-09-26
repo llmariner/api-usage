@@ -7,6 +7,8 @@ import (
 	"github.com/go-logr/stdr"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/server"
+	"github.com/llmariner/api-usage/server/internal/store"
+	"github.com/llmariner/common/pkg/db"
 	"github.com/spf13/cobra"
 )
 
@@ -40,6 +42,19 @@ func runCmd() *cobra.Command {
 
 func run(ctx context.Context, c *config.Config) error {
 	logger := stdr.New(log.Default())
-	srv := server.New(logger)
+	log := logger.WithName("boot")
+
+	log.Info("Setting up the database...")
+	dbInst, err := db.OpenDB(c.Database)
+	if err != nil {
+		return err
+	}
+	st := store.New(dbInst)
+	if err := st.AutoMigrate(); err != nil {
+		return err
+	}
+
+	log.Info("Setting up the server...")
+	srv := server.New(st, logger)
 	return srv.Run(ctx, c.GRPCPort)
 }
