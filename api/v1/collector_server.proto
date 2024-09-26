@@ -23,6 +23,6 @@ message CollectUsageRequest {
 
 message CollectUsageResponse {}
 
-service CollectionService {
+service CollectionInternalService {
   rpc CollectUsage(CollectUsageRequest) returns (CollectUsageResponse);
 }
