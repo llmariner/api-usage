@@ -26,7 +26,7 @@ func New(store *store.Store, logger logr.Logger) *Server {
 
 // Server is the server for the collection service.
 type Server struct {
-	v1.UnimplementedCollectonServiceServer
+	v1.UnimplementedCollectionServiceServer
 
 	store  *store.Store
 	logger logr.Logger
@@ -37,7 +37,7 @@ func (s *Server) Run(ctx context.Context, port int) error {
 	s.logger.Info("Starting the gRPC server...", "port", port)
 
 	grpcServer := grpc.NewServer()
-	v1.RegisterCollectonServiceServer(grpcServer, s)
+	v1.RegisterCollectionServiceServer(grpcServer, s)
 	reflection.Register(grpcServer)
 
 	healthCheck := health.NewServer()
