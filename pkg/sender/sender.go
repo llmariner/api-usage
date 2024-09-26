@@ -63,7 +63,7 @@ func (s *UsageSender) Run(ctx context.Context) {
 		select {
 		case record := <-s.usageCh:
 			buffer = append(buffer, record)
-			if size := proto.Size(&v1.CollectUsageRequest{Records: buffer}); size > s.maxMessageSize {
+			if size := proto.Size(&v1.CreateUsageRequest{Records: buffer}); size > s.maxMessageSize {
 				s.logger.V(1).Info("Max message size exceeded", "size", size, "count", len(buffer))
 				records := buffer[:len(buffer)-1]
 				buffer = []*v1.UsageRecord{record}
@@ -96,8 +96,8 @@ func (s *UsageSender) AddUsage(usage *v1.UsageRecord) {
 }
 
 func (s *UsageSender) sendUsageData(ctx context.Context, records []*v1.UsageRecord) error {
-	req := &v1.CollectUsageRequest{Records: records}
-	if _, err := s.client.CollectUsage(ctx, req); err != nil {
+	req := &v1.CreateUsageRequest{Records: records}
+	if _, err := s.client.CreateUsage(ctx, req); err != nil {
 		return fmt.Errorf("collect usage: %s", err)
 	}
 	s.logger.V(4).Info("Sent API usage", "count", len(records))

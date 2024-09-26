@@ -56,9 +56,9 @@ func (s *Server) Run(ctx context.Context, port int) error {
 	return nil
 }
 
-// CollectUsage collects usage.
-func (s *Server) CollectUsage(ctx context.Context, req *v1.CollectUsageRequest) (*v1.CollectUsageResponse, error) {
-	s.logger.V(4).WithName("api").Info("CollectUsage", "count", len(req.Records))
+// CreateUsage creates usage.
+func (s *Server) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest) (*v1.CreateUsageResponse, error) {
+	s.logger.V(4).WithName("api").Info("CreateUsage", "count", len(req.Records))
 	// TODO: add authentication
 
 	var records []*store.Usage
@@ -78,5 +78,5 @@ func (s *Server) CollectUsage(ctx context.Context, req *v1.CollectUsageRequest) 
 		return nil, status.Errorf(codes.Internal, "create usage: %s", err)
 	}
 
-	return &v1.CollectUsageResponse{}, nil
+	return &v1.CreateUsageResponse{}, nil
 }

@@ -17,12 +17,12 @@ message UsageRecord {
   int32 latency_ms = 8;
 }
 
-message CollectUsageRequest {
+message CreateUsageRequest {
   repeated UsageRecord records = 1;
 }
 
-message CollectUsageResponse {}
+message CreateUsageResponse {}
 
 service CollectionInternalService {
-  rpc CollectUsage(CollectUsageRequest) returns (CollectUsageResponse);
+  rpc CreateUsage(CreateUsageRequest) returns (CreateUsageResponse);
 }
