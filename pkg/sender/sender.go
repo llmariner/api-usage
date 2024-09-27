@@ -11,11 +11,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// UsageSetter is an interface that allows components to add usage data to the sender.
-type UsageSetter interface {
-	AddUsage(usage *v1.UsageRecord)
-}
-
 // New creates a new UsageSender.
 func New(ctx context.Context, c Config, opt grpc.DialOption, log logr.Logger) (*UsageSender, error) {
 	cc, err := grpc.NewClient(c.APIUsageInternalServerAddr, opt)
