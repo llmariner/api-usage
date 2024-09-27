@@ -10,14 +10,14 @@ import (
 
 // Config is the configuration.
 type Config struct {
-	GRPCPort int `yaml:"grpcPort"`
+	InternalGRPCPort int `yaml:"internalGrpcPort"`
 
 	Database db.Config `yaml:"database"`
 }
 
 // Validate validates the configuration.
 func (c *Config) Validate() error {
-	if c.GRPCPort <= 0 {
+	if c.InternalGRPCPort <= 0 {
 		return fmt.Errorf("grpcPort must be greater than 0")
 	}
 	if err := c.Database.Validate(); err != nil {
