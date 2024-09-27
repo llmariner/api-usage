@@ -62,8 +62,8 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
-          public.ecr.aws/cloudnatix/llmariner/usage-api:${{ needs.update-tag.outputs.new_version }}
-          public.ecr.aws/cloudnatix/llmariner/usage-api:latest
+          public.ecr.aws/cloudnatix/llmariner/api-usage-server:${{ needs.update-tag.outputs.new_version }}
+          public.ecr.aws/cloudnatix/llmariner/api-usage-server:latest
     - name: Build, tag, and push server to Amazon ECR
       uses: docker/build-push-action@v6
       with:
@@ -71,5 +71,5 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
-          public.ecr.aws/cloudnatix/llmariner/usage-api:${{ needs.update-tag.outputs.new_version }}
-          public.ecr.aws/cloudnatix/llmariner/usage-api:latest
+          public.ecr.aws/cloudnatix/llmariner/api-usage-server:${{ needs.update-tag.outputs.new_version }}
+          public.ecr.aws/cloudnatix/llmariner/api-usage-server:latest
