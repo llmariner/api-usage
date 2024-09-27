@@ -1,0 +1,6 @@
+apiVersion: v2
+name: api-usage-server
+description: A Helm chart for api-usage-server
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
