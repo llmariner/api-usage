@@ -18,7 +18,7 @@ type UsageSetter interface {
 
 // New creates a new UsageSender.
 func New(ctx context.Context, c Config, opt grpc.DialOption, log logr.Logger) (*UsageSender, error) {
-	cc, err := grpc.NewClient(c.ServerAddr, opt)
+	cc, err := grpc.NewClient(c.APIUsageInternalServerAddr, opt)
 	if err != nil {
 		return nil, fmt.Errorf("create client: %s", err)
 	}

@@ -18,8 +18,8 @@ const (
 
 // Config is the configuration for the sender.
 type Config struct {
-	// ServerAddr is the address of the server to send usage data to.
-	ServerAddr string `yaml:"serverAddr"`
+	// APIUsageInternalServerAddr is the address of the server to send usage data to.
+	APIUsageInternalServerAddr string `yaml:"apiUsageInternalServerAddr"`
 	// InitialDelay is the time to wait before starting the sender.
 	InitialDelay time.Duration `yaml:"initialDelay"`
 	// Interval is the interval at which the sender sends usage data to the server.
@@ -32,7 +32,7 @@ type Config struct {
 
 // Validate validates the configuration.
 func (c *Config) Validate() error {
-	if c.ServerAddr == "" {
+	if c.APIUsageInternalServerAddr == "" {
 		return fmt.Errorf("server address is required")
 	}
 
