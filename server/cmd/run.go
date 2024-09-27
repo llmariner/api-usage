@@ -56,5 +56,5 @@ func run(ctx context.Context, c *config.Config) error {
 
 	log.Info("Setting up the server...")
 	srv := server.New(st, logger)
-	return srv.Run(ctx, c.GRPCPort)
+	return srv.Run(ctx, c.InternalGRPCPort)
 }
