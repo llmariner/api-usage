@@ -16,6 +16,23 @@ message UsageRecord {
 
   int64 timestamp = 7;
   int32 latency_ms = 8;
+
+  oneof usage_details {
+    CreateChatCompletion create_chat_completion = 9;
+    CreateCompletion create_completion = 10;
+  }
+}
+
+message CreateChatCompletion {
+  string model_id = 1;
+  // How quickly users start seeing the model's output after entering their query.
+  int32 time_to_first_token_ms = 2;
+}
+
+message CreateCompletion {
+  string model_id = 1;
+  // How quickly users start seeing the model's output after entering their query.
+  int32 time_to_first_token_ms = 2;
 }
 
 message CreateUsageRequest {
