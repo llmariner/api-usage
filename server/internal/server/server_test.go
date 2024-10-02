@@ -19,7 +19,7 @@ func TestCreateUsage(t *testing.T) {
 	var records []*v1.UsageRecord
 	for i := 0; i < 3; i++ {
 		records = append(records, &v1.UsageRecord{
-			User:      fmt.Sprintf("u%d", i),
+			UserId:    fmt.Sprintf("u%d", i),
 			Timestamp: time.Now().UnixNano(),
 		})
 	}
