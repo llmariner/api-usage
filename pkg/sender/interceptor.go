@@ -20,7 +20,7 @@ func Unary(setter UsageSetter) grpc.UnaryServerInterceptor {
 		start := time.Now()
 		resp, err := handler(ctx, req)
 		setter.AddUsage(&v1.UsageRecord{
-			User:         ui.InternalUserID,
+			UserId:       ui.InternalUserID,
 			Tenant:       ui.TenantID,
 			Organization: ui.OrganizationID,
 			Project:      ui.ProjectID,

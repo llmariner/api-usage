@@ -64,7 +64,7 @@ func (s *Server) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest) (*
 	var records []*store.Usage
 	for _, r := range req.Records {
 		records = append(records, &store.Usage{
-			User:         r.User,
+			UserID:       r.UserId,
 			Tenant:       r.Tenant,
 			Organization: r.Organization,
 			Project:      r.Project,

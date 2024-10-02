@@ -6,7 +6,7 @@ import "gorm.io/gorm"
 type Usage struct {
 	gorm.Model
 
-	User         string `gorm:"uniqueIndex:idx_user_ts"`
+	UserID       string `gorm:"uniqueIndex:idx_user_ts"`
 	Tenant       string
 	Organization string
 	Project      string

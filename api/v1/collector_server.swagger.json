@@ -39,7 +39,6 @@
         "details": {
           "type": "array",
           "items": {
-            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
@@ -51,8 +50,9 @@
     "v1UsageRecord": {
       "type": "object",
       "properties": {
-        "user": {
-          "type": "string"
+        "userId": {
+          "type": "string",
+          "description": "user ID is the internal user ID."
         },
         "tenant": {
           "type": "string"

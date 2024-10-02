@@ -5,7 +5,8 @@ package llmariner.apiusage.server.v1;
 option go_package = "github.com/llmariner/api-usage/api/v1";
 
 message UsageRecord {
-  string user = 1;
+  // user ID is the internal user ID.
+  string user_id = 1;
   string tenant = 2;
   string organization = 3;
   string project = 4;
