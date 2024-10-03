@@ -15,6 +15,13 @@ type Usage struct {
 	StatusCode int32
 	Timestamp  int64 `gorm:"uniqueIndex:idx_user_ts"`
 	LatencyMS  int32
+
+	// The following fields are used for chat completions and completions.
+	// TODO(kenji): Move these fields to a separate table if needed.
+	ModelID            string
+	TimeToFirstTokenMS int32
+	PromptTokens       int32
+	CompletionTokens   int32
 }
 
 // CreateUsage creates a new usage.

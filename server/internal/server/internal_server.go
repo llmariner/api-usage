@@ -63,6 +63,32 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 
 	var records []*store.Usage
 	for _, r := range req.Records {
+		var (
+			modelID            string
+			timeToFirstTokenMS int32
+			promptTokens       int32
+			completionTokens   int32
+		)
+
+		if d := r.Details; d != nil {
+			switch d.Message.(type) {
+			case *v1.UsageDetails_CreateChatCompletion:
+				c := d.GetCreateChatCompletion()
+				modelID = c.ModelId
+				timeToFirstTokenMS = c.TimeToFirstTokenMs
+				promptTokens = c.PromptTokens
+				completionTokens = c.CompletionTokens
+			case *v1.UsageDetails_CreateCompletion:
+				c := d.GetCreateCompletion()
+				modelID = c.ModelId
+				timeToFirstTokenMS = c.TimeToFirstTokenMs
+				promptTokens = c.PromptTokens
+				completionTokens = c.CompletionTokens
+			default:
+				return nil, status.Errorf(codes.InvalidArgument, "invalid details")
+			}
+		}
+
 		records = append(records, &store.Usage{
 			UserID:       r.UserId,
 			Tenant:       r.Tenant,
@@ -72,6 +98,11 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 			StatusCode:   r.StatusCode,
 			Timestamp:    r.Timestamp,
 			LatencyMS:    r.LatencyMs,
+
+			ModelID:            modelID,
+			TimeToFirstTokenMS: timeToFirstTokenMS,
+			PromptTokens:       promptTokens,
+			CompletionTokens:   completionTokens,
 		})
 	}
 	if err := s.store.CreateUsage(records...); err != nil {
