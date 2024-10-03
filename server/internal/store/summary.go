@@ -2,7 +2,7 @@ package store
 
 // Summary is a struct that represents the summary of the usage data.
 type Summary struct {
-	ApiMethod       string
+	APIMethod       string
 	TotalRequests   int64
 	SuccessRequests int64
 	FailureRequests int64

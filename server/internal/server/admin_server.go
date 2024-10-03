@@ -89,7 +89,7 @@ func (s *AdminServer) GetAggregatedSummary(ctx context.Context, req *v1.GetAggre
 		cumulativeSum += s.AverageLatency * float64(s.TotalRequests)
 
 		methods = append(methods, &v1.Summary{
-			Method:          s.ApiMethod,
+			Method:          s.APIMethod,
 			TotalRequests:   s.TotalRequests,
 			SuccessRequests: s.SuccessRequests,
 			FailureRequests: s.FailureRequests,

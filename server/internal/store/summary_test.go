@@ -72,13 +72,13 @@ func TestAggregatedUsage(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
 
-	assert.Equal(t, "GetFoo", result[0].ApiMethod)
+	assert.Equal(t, "GetFoo", result[0].APIMethod)
 	assert.Equal(t, int64(3), result[0].TotalRequests)
 	assert.Equal(t, int64(2), result[0].SuccessRequests)
 	assert.Equal(t, int64(1), result[0].FailureRequests)
 	assert.Equal(t, float64(150), result[0].AverageLatency) // avg(100 + 150 + 200)
 
-	assert.Equal(t, "UpdateFoo", result[1].ApiMethod)
+	assert.Equal(t, "UpdateFoo", result[1].APIMethod)
 	assert.Equal(t, int64(2), result[1].TotalRequests)
 	assert.Equal(t, int64(2), result[1].SuccessRequests)
 	assert.Equal(t, int64(0), result[1].FailureRequests)
