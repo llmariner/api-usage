@@ -32,6 +32,9 @@ spec:
         - --config
         - /etc/config/config.yaml
         ports:
+        - name: admin-grpc
+          containerPort: {{ .Values.adminGrpcPort }}
+          protocol: TCP
         - name: internal-grpc
           containerPort: {{ .Values.internalGrpcPort }}
           protocol: TCP

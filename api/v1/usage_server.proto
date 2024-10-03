@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package llmariner.apiusage.server.v1;
+
+option go_package = "github.com/llmariner/api-usage/api/v1";
+
+message GetAggregatedSummaryRequest {
+  string tenant_id = 1;
+
+  // star_time is the UNIX timestamp for the summary start time (inclusive).
+  // If start_time is not provided, the default is the 24 hours before end_time.
+  int64 start_time = 2;
+  // end_time is the UNIX timestamp for the summary end time (exclusive).
+  // If end_time is not provided, the default is the current time.
+  int64 end_time = 3;
+}
+
+message Summary {
+  string method = 1;
+  int64 total_requests = 2;
+  int64 success_requests = 3;
+  int64 failure_requests = 4;
+  double average_latency = 5;
+}
+
+message AggregatedSummary {
+  Summary summary = 1;
+  repeated Summary method_summaries = 2;
+}
+
+service APIUsageService {
+  rpc GetAggregatedSummary(GetAggregatedSummaryRequest) returns (AggregatedSummary);
+}

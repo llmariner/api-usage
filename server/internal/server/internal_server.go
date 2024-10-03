@@ -16,25 +16,25 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// New creates a new server.
-func New(store *store.Store, logger logr.Logger) *Server {
-	return &Server{
+// NewInternal creates a new internal server.
+func NewInternal(store *store.Store, logger logr.Logger) *InternalServer {
+	return &InternalServer{
 		store:  store,
-		logger: logger.WithName("grpc"),
+		logger: logger.WithName("internal"),
 	}
 }
 
-// Server is the server for the collection service.
-type Server struct {
+// InternalServer is the server for the collection service.
+type InternalServer struct {
 	v1.UnimplementedCollectionInternalServiceServer
 
 	store  *store.Store
 	logger logr.Logger
 }
 
-// Run starts the gRPC server.
-func (s *Server) Run(ctx context.Context, port int) error {
-	s.logger.Info("Starting the gRPC server...", "port", port)
+// Run starts the internal gRPC server.
+func (s *InternalServer) Run(ctx context.Context, port int) error {
+	s.logger.Info("Starting the internal server...", "port", port)
 
 	grpcServer := grpc.NewServer()
 	v1.RegisterCollectionInternalServiceServer(grpcServer, s)
@@ -52,12 +52,12 @@ func (s *Server) Run(ctx context.Context, port int) error {
 		return fmt.Errorf("serve: %s", err)
 	}
 
-	s.logger.Info("Stopped gRPC server")
+	s.logger.Info("Stopped internal server")
 	return nil
 }
 
 // CreateUsage creates usage.
-func (s *Server) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest) (*v1.Usage, error) {
+func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageRequest) (*v1.Usage, error) {
 	s.logger.V(4).WithName("api").Info("CreateUsage", "count", len(req.Records))
 	// TODO: add authentication
 
