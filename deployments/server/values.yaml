@@ -16,6 +16,7 @@ global:
 database:
   database: api_usage
 
+adminGrpcPort: 8084
 internalGrpcPort: 8082
 
 replicaCount: 1

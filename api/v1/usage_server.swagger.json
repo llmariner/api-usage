@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/v1/collector_server.proto",
+    "title": "api/v1/usage_server.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "CollectionInternalService"
+      "name": "APIUsageService"
     }
   ],
   "consumes": [
@@ -45,39 +45,42 @@
         }
       }
     },
-    "v1Usage": {
-      "type": "object"
-    },
-    "v1UsageRecord": {
+    "v1AggregatedSummary": {
       "type": "object",
       "properties": {
-        "userId": {
-          "type": "string",
-          "description": "user ID is the internal user ID."
+        "summary": {
+          "$ref": "#/definitions/v1Summary"
         },
-        "tenant": {
+        "methodSummaries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Summary"
+          }
+        }
+      }
+    },
+    "v1Summary": {
+      "type": "object",
+      "properties": {
+        "method": {
           "type": "string"
         },
-        "organization": {
-          "type": "string"
-        },
-        "project": {
-          "type": "string"
-        },
-        "apiMethod": {
-          "type": "string"
-        },
-        "statusCode": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "timestamp": {
+        "totalRequests": {
           "type": "string",
           "format": "int64"
         },
-        "latencyMs": {
-          "type": "integer",
-          "format": "int32"
+        "successRequests": {
+          "type": "string",
+          "format": "int64"
+        },
+        "failureRequests": {
+          "type": "string",
+          "format": "int64"
+        },
+        "averageLatency": {
+          "type": "number",
+          "format": "double"
         }
       }
     }

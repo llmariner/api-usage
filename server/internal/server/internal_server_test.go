@@ -23,7 +23,7 @@ func TestCreateUsage(t *testing.T) {
 			Timestamp: time.Now().UnixNano(),
 		})
 	}
-	srv := New(st, testr.New(t))
+	srv := NewInternal(st, testr.New(t))
 	ctx := context.Background()
 
 	_, err := srv.CreateUsage(ctx, &v1.CreateUsageRequest{Records: records})

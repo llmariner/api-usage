@@ -10,6 +10,7 @@ import (
 
 // Config is the configuration.
 type Config struct {
+	AdminGRPCPort    int `yaml:"adminGrpcPort"`
 	InternalGRPCPort int `yaml:"internalGrpcPort"`
 
 	Database db.Config `yaml:"database"`
@@ -17,6 +18,9 @@ type Config struct {
 
 // Validate validates the configuration.
 func (c *Config) Validate() error {
+	if c.AdminGRPCPort <= 0 {
+		return fmt.Errorf("adminGrpcPort must be greater than 0")
+	}
 	if c.InternalGRPCPort <= 0 {
 		return fmt.Errorf("grpcPort must be greater than 0")
 	}

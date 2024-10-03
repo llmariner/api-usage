@@ -10,6 +10,7 @@ import (
 	"github.com/llmariner/api-usage/server/internal/store"
 	"github.com/llmariner/common/pkg/db"
 	"github.com/spf13/cobra"
+	"golang.org/x/sync/errgroup"
 )
 
 func runCmd() *cobra.Command {
@@ -55,6 +56,11 @@ func run(ctx context.Context, c *config.Config) error {
 	}
 
 	log.Info("Setting up the server...")
-	srv := server.New(st, logger)
-	return srv.Run(ctx, c.InternalGRPCPort)
+	asrv := server.NewAdmin(st, logger)
+	isrv := server.NewInternal(st, logger)
+
+	eg, ctx := errgroup.WithContext(ctx)
+	eg.Go(func() error { return asrv.Run(ctx, c.AdminGRPCPort) })
+	eg.Go(func() error { return isrv.Run(ctx, c.InternalGRPCPort) })
+	return eg.Wait()
 }

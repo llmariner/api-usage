@@ -6,6 +6,7 @@ metadata:
     {{- include "api-usage-server.labels" . | nindent 4 }}
 data:
   config.yaml: |
+    adminGrpcPort: {{ .Values.adminGrpcPort }}
     internalGrpcPort: {{ .Values.internalGrpcPort }}
     database:
       host: {{ .Values.global.database.host }}
