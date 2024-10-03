@@ -82,19 +82,19 @@ func (s *AdminServer) GetAggregatedSummary(ctx context.Context, req *v1.GetAggre
 	var cumulativeSum float64
 	total := &v1.Summary{}
 	methods := make([]*v1.Summary, len(summary))
-	for _, s := range summary {
+	for i, s := range summary {
 		total.TotalRequests += s.TotalRequests
 		total.SuccessRequests += s.SuccessRequests
 		total.FailureRequests += s.FailureRequests
 		cumulativeSum += s.AverageLatency * float64(s.TotalRequests)
 
-		methods = append(methods, &v1.Summary{
+		methods[i] = &v1.Summary{
 			Method:          s.APIMethod,
 			TotalRequests:   s.TotalRequests,
 			SuccessRequests: s.SuccessRequests,
 			FailureRequests: s.FailureRequests,
 			AverageLatency:  s.AverageLatency,
-		})
+		}
 	}
 	if total.TotalRequests > 0 {
 		total.AverageLatency = cumulativeSum / float64(total.TotalRequests)
