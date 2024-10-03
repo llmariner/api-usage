@@ -39,7 +39,6 @@
         "details": {
           "type": "array",
           "items": {
-            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
@@ -54,7 +53,6 @@
         "methodSummaries": {
           "type": "array",
           "items": {
-            "type": "object",
             "$ref": "#/definitions/v1Summary"
           }
         }

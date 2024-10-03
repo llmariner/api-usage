@@ -39,14 +39,70 @@
         "details": {
           "type": "array",
           "items": {
-            "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
         }
       }
     },
+    "v1CreateChatCompletion": {
+      "type": "object",
+      "properties": {
+        "modelId": {
+          "type": "string"
+        },
+        "timeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query."
+        },
+        "promptTokens": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number off tokens in the prompt."
+        },
+        "completionTokens": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of tokens in the completion."
+        }
+      }
+    },
+    "v1CreateCompletion": {
+      "type": "object",
+      "properties": {
+        "modelId": {
+          "type": "string"
+        },
+        "timeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query."
+        },
+        "promptTokens": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number off tokens in the prompt."
+        },
+        "completionTokens": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of tokens in the completion."
+        }
+      }
+    },
     "v1Usage": {
       "type": "object"
+    },
+    "v1UsageDetails": {
+      "type": "object",
+      "properties": {
+        "createChatCompletion": {
+          "$ref": "#/definitions/v1CreateChatCompletion"
+        },
+        "createCompletion": {
+          "$ref": "#/definitions/v1CreateCompletion"
+        }
+      }
     },
     "v1UsageRecord": {
       "type": "object",
@@ -78,6 +134,9 @@
         "latencyMs": {
           "type": "integer",
           "format": "int32"
+        },
+        "details": {
+          "$ref": "#/definitions/v1UsageDetails"
         }
       }
     }
