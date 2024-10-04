@@ -11,6 +11,8 @@ type Usage struct {
 	Organization string
 	Project      string
 
+	APIKeyID string
+
 	APIMethod  string
 	StatusCode int32
 	Timestamp  int64 `gorm:"uniqueIndex:idx_user_ts"`

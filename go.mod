@@ -6,7 +6,7 @@ require (
 	github.com/go-logr/logr v1.4.2
 	github.com/go-logr/stdr v1.2.2
 	github.com/llmariner/common v0.7.0
-	github.com/llmariner/rbac-manager v0.106.0
+	github.com/llmariner/rbac-manager v0.112.0
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/sync v0.8.0
