@@ -94,6 +94,7 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 			Tenant:       r.Tenant,
 			Organization: r.Organization,
 			Project:      r.Project,
+			APIKeyID:     r.ApiKeyId,
 			APIMethod:    r.ApiMethod,
 			StatusCode:   r.StatusCode,
 			Timestamp:    r.Timestamp,

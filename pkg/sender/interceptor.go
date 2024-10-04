@@ -24,6 +24,7 @@ func Unary(setter UsageSetter) grpc.UnaryServerInterceptor {
 			Tenant:       ui.TenantID,
 			Organization: ui.OrganizationID,
 			Project:      ui.ProjectID,
+			ApiKeyId:     ui.APIKeyID,
 			ApiMethod:    info.FullMethod,
 			StatusCode:   int32(status.Code(err)),
 			Timestamp:    start.UnixNano(),

@@ -120,6 +120,9 @@
         "project": {
           "type": "string"
         },
+        "apiKeyId": {
+          "type": "string"
+        },
         "apiMethod": {
           "type": "string"
         },
