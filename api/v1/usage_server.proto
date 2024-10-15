@@ -28,6 +28,56 @@ message AggregatedSummary {
   repeated Summary method_summaries = 2;
 }
 
+message GetUsageDataRequest {
+  string tenant_id = 1;
+
+  // start_time is the UNIX timestamp for the data start time (inclusive).
+  // If start_time is not provided, the default is the 24 hours before end_time.
+  int64 start_time = 2;
+  // end_time is the UNIX timestamp for the data end time (exclusive).
+  // If end_time is not provided, the default is the current time.
+  int64 end_time = 3;
+
+  Filter filter = 4;
+
+  // after is the identifier for the last datum from the previous pagination request.
+  string after = 5;
+  // limit is the number of entries to retrieve.
+  int32 limit = 6;
+
+  message Filter {
+    repeated string api_keys = 1;
+    repeated string models = 2;
+  }
+}
+
+
+
+message UsageData {
+  string method = 1;
+  repeated UsageDataPoint data_points = 2;
+}
+
+message UsageDataPoint {
+  string user_id = 1;
+  string tenant = 2;
+  string organization = 3;
+  string project = 4;
+
+  string api_key_id = 5;
+
+  string api_method = 6;
+  int32 status_code = 7;
+  int64 timestamp = 8;
+  int32 latency_ms = 9;
+
+  string model_id = 10;
+  int32 time_to_first_token_ms = 11;
+  int32 prompt_tokens = 12;
+  int32 completion_tokens = 13;
+}
+
 service APIUsageService {
   rpc GetAggregatedSummary(GetAggregatedSummaryRequest) returns (AggregatedSummary);
+  rpc GetUsageData(GetUsageDataRequest) returns (UsageData);
 }
