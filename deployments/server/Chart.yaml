@@ -1,6 +1,15 @@
 apiVersion: v2
 name: api-usage-server
-description: A Helm chart for api-usage-server
+description: The API usage server collects API usage data from LLMariner components and aggregate it. 
+home: https://llmariner.ai/
+icon: https://raw.githubusercontent.com/llmariner/llmariner.github.io/refs/heads/main/assets/icons/logo.svg
 type: application
 version: 1.0.0
 appVersion: 1.0.0
+sources:
+  - https://github.com/llmariner/api-usage
+keywords:
+  - llmariner
+annotations:
+  "artifacthub.io/category": ai-machine-learning
+  "artifacthub.io/license": Apache-2.0

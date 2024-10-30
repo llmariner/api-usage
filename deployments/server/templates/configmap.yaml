@@ -9,10 +9,10 @@ data:
     adminGrpcPort: {{ .Values.adminGrpcPort }}
     internalGrpcPort: {{ .Values.internalGrpcPort }}
     database:
-      host: {{ .Values.global.database.host }}
-      port: {{ .Values.global.database.port }}
+      host: {{ required "global.database.host is required" .Values.global.database.host }}
+      port: {{ required "global.database.host is required" .Values.global.database.port }}
       database: {{ .Values.database.database }}
-      username: {{ .Values.global.database.username }}
+      username: {{ required "global.database.username is required" .Values.global.database.username }}
       passwordEnvName: DB_PASSWORD
       ssl:
         mode: {{ .Values.global.database.ssl.mode }}
