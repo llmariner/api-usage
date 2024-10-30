@@ -1,5 +1,7 @@
 # API Usage Server
 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/api-usage-server)](https://artifacthub.io/packages/search?repo=api-usage-server)
+
 The API usage server is a sub-component of [LLMariner](https://github.com/llmariner/llmariner). It aggregates API usage data from other API servers. See [Technical Details](https://llmariner.ai/docs/dev/architecture/) document for details.
 
 > [!NOTE]
