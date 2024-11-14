@@ -49,3 +49,8 @@ Selector labels
 app.kubernetes.io/name: {{ include "api-usage-server.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+Do nothing, just for validation.
+*/}}
+{{ .Values.enable }}
