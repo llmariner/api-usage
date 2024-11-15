@@ -18,6 +18,8 @@ const (
 
 // Config is the configuration for the sender.
 type Config struct {
+	// Enable is the flag to enable the sender.
+	Enable bool `yaml:"enable"`
 	// APIUsageInternalServerAddr is the address of the server to send usage data to.
 	APIUsageInternalServerAddr string `yaml:"apiUsageInternalServerAddr"`
 	// InitialDelay is the time to wait before starting the sender.
@@ -32,6 +34,10 @@ type Config struct {
 
 // Validate validates the configuration.
 func (c *Config) Validate() error {
+	if !c.Enable {
+		return nil
+	}
+
 	if c.APIUsageInternalServerAddr == "" {
 		return fmt.Errorf("server address is required")
 	}
