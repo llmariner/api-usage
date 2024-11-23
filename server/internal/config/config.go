@@ -3,15 +3,34 @@ package config
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/llmariner/common/pkg/db"
 	"gopkg.in/yaml.v3"
 )
 
+// CleanerConfig is the configuration for the cleaner.
+type CleanerConfig struct {
+	RetentionPeriod time.Duration `yaml:"retentionPeriod"`
+	PollInterval    time.Duration `yaml:"pollInterval"`
+}
+
+// Validate validates the configuration.
+func (c CleanerConfig) Validate() error {
+	if c.RetentionPeriod <= 0 {
+		return fmt.Errorf("retentionPeriod must be greater than 0")
+	}
+	if c.PollInterval <= 0 {
+		return fmt.Errorf("pollInterval must be greater than 0")
+	}
+	return nil
+}
+
 // Config is the configuration.
 type Config struct {
-	AdminGRPCPort    int `yaml:"adminGrpcPort"`
-	InternalGRPCPort int `yaml:"internalGrpcPort"`
+	AdminGRPCPort    int           `yaml:"adminGrpcPort"`
+	InternalGRPCPort int           `yaml:"internalGrpcPort"`
+	Cleaner          CleanerConfig `yaml:"cleaner"`
 
 	Database db.Config `yaml:"database"`
 }
@@ -23,6 +42,9 @@ func (c *Config) Validate() error {
 	}
 	if c.InternalGRPCPort <= 0 {
 		return fmt.Errorf("grpcPort must be greater than 0")
+	}
+	if err := c.Cleaner.Validate(); err != nil {
+		return fmt.Errorf("cleaner: %s", err)
 	}
 	if err := c.Database.Validate(); err != nil {
 		return fmt.Errorf("database: %s", err)

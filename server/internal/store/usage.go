@@ -30,3 +30,18 @@ type Usage struct {
 func (s *Store) CreateUsage(usage ...*Usage) error {
 	return s.db.Create(usage).Error
 }
+
+// DeleteUsage deletes a usage.
+func (s *Store) DeleteUsage(timestamp int64, limit int) (int64, error) {
+	res := s.db.Unscoped().Where("timestamp < ?", timestamp).Limit(limit).Delete(&Usage{})
+	return res.RowsAffected, res.Error
+}
+
+// FindUsages returns the usages. This is used for testing.
+func (s *Store) FindUsages() ([]*Usage, error) {
+	var usages []*Usage
+	if err := s.db.Find(&usages).Error; err != nil {
+		return nil, err
+	}
+	return usages, nil
+}

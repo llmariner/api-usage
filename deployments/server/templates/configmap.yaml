@@ -8,6 +8,9 @@ data:
   config.yaml: |
     adminGrpcPort: {{ .Values.adminGrpcPort }}
     internalGrpcPort: {{ .Values.internalGrpcPort }}
+    cleaner:
+      pollInterval: {{ .Values.cleaner.pollInterval }}
+      retentionPeriod: {{ .Values.cleaner.retentionPeriod }}
     database:
       host: {{ required "global.database.host is required" .Values.global.database.host }}
       port: {{ required "global.database.host is required" .Values.global.database.port }}
