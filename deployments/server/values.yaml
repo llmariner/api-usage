@@ -151,10 +151,10 @@ livenessProbe:
   # liveness or readiness probes are initiated.
   # +docs:type=number
   initialDelaySeconds: 3
-  # How often (in seconds) to perform the probe. Default to 10 seconds. 
+  # How often (in seconds) to perform the probe. Default to 10 seconds.
   # +docs:type=number
   periodSeconds: 10
-  # Number of seconds after which the probe times out. 
+  # Number of seconds after which the probe times out.
   # +docs:type=number
   timeoutSeconds: 15
   # Minimum consecutive successes for the probe to be considered
@@ -163,7 +163,7 @@ livenessProbe:
   successThreshold: 1
   # After a probe fails `failureThreshold` times in a row, Kubernetes
   # considers that the overall check has failed: the container is not
-  # ready/healthy/live. 
+  # ready/healthy/live.
   # +docs:type=number
   failureThreshold: 5
 
@@ -196,4 +196,5 @@ securityContext:
 # This definition is only here as a placeholder such that it is
 # included in the json schema.
 # +docs:hidden
-enable: true
+# +docs:property
+# enable: true
