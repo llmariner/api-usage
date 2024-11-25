@@ -60,6 +60,13 @@ adminGrpcPort: 8084
 # +docs:type=number
 internalGrpcPort: 8082
 
+cleaner:
+  # The interval in time duration to clean up the database.
+  # +docs:type=string
+  pollInterval: 1h
+  # The retention period in time duration for the database.
+  # +docs:type=string
+  retentionPeriod: 30d
 # Override the "api-usage-server.fullname" value. This value is used as part of
 # most of the names of the resources created by this Helm chart.
 # +docs:property

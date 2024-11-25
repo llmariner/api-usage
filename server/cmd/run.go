@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/go-logr/stdr"
+	"github.com/llmariner/api-usage/server/internal/cleaner"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/server"
 	"github.com/llmariner/api-usage/server/internal/store"
@@ -55,6 +56,10 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
+	// TODO(guangrui): Make cleaner as a separate deployment.
+	log.Info("Setting up cleaner...")
+	cleaner := cleaner.NewCleaner(st, c.Cleaner.RetentionPeriod, c.Cleaner.PollInterval, logger)
+
 	log.Info("Setting up the server...")
 	asrv := server.NewAdmin(st, logger)
 	isrv := server.NewInternal(st, logger)
@@ -62,5 +67,6 @@ func run(ctx context.Context, c *config.Config) error {
 	eg, ctx := errgroup.WithContext(ctx)
 	eg.Go(func() error { return asrv.Run(ctx, c.AdminGRPCPort) })
 	eg.Go(func() error { return isrv.Run(ctx, c.InternalGRPCPort) })
+	eg.Go(func() error { return cleaner.Run(ctx) })
 	return eg.Wait()
 }
