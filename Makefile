@@ -4,8 +4,7 @@ default: test
 include common.mk
 
 .PHONY: generate
-generate:
-	buf generate
+generate: buf-generate-all typescript-compile
 
 .PHONY: test
 test: go-test-all

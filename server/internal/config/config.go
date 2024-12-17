@@ -26,11 +26,32 @@ func (c CleanerConfig) Validate() error {
 	return nil
 }
 
+// AuthConfig is the authentication configuration.
+type AuthConfig struct {
+	Enable                 bool   `yaml:"enable"`
+	RBACInternalServerAddr string `yaml:"rbacInternalServerAddr"`
+}
+
+// Validate validates the configuration.
+func (c *AuthConfig) validate() error {
+	if !c.Enable {
+		return nil
+	}
+	if c.RBACInternalServerAddr == "" {
+		return fmt.Errorf("rbacInternalServerAddr must be set")
+	}
+	return nil
+}
+
 // Config is the configuration.
 type Config struct {
 	AdminGRPCPort    int           `yaml:"adminGrpcPort"`
+	GRPCPort         int           `yaml:"grpcPort"`
+	HTTPPort         int           `yaml:"httpPort"`
 	InternalGRPCPort int           `yaml:"internalGrpcPort"`
 	Cleaner          CleanerConfig `yaml:"cleaner"`
+
+	AuthConfig AuthConfig `yaml:"auth"`
 
 	Database db.Config `yaml:"database"`
 }
@@ -40,11 +61,20 @@ func (c *Config) Validate() error {
 	if c.AdminGRPCPort <= 0 {
 		return fmt.Errorf("adminGrpcPort must be greater than 0")
 	}
+	if c.GRPCPort <= 0 {
+		return fmt.Errorf("grpcPort must be greater than 0")
+	}
+	if c.HTTPPort <= 0 {
+		return fmt.Errorf("httpPort must be greater than 0")
+	}
 	if c.InternalGRPCPort <= 0 {
 		return fmt.Errorf("grpcPort must be greater than 0")
 	}
 	if err := c.Cleaner.Validate(); err != nil {
 		return fmt.Errorf("cleaner: %s", err)
+	}
+	if err := c.AuthConfig.validate(); err != nil {
+		return fmt.Errorf("auth: %s", err)
 	}
 	if err := c.Database.Validate(); err != nil {
 		return fmt.Errorf("database: %s", err)

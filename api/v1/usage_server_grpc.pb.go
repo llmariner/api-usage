@@ -19,6 +19,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type APIUsageServiceClient interface {
 	GetAggregatedSummary(ctx context.Context, in *GetAggregatedSummaryRequest, opts ...grpc.CallOption) (*AggregatedSummary, error)
+	GetUsageData(ctx context.Context, in *GetUsageDataRequest, opts ...grpc.CallOption) (*UsageData, error)
+	ListUsageData(ctx context.Context, in *ListUsageDataRequest, opts ...grpc.CallOption) (*ListUsageDataResponse, error)
 }
 
 type aPIUsageServiceClient struct {
@@ -38,11 +40,31 @@ func (c *aPIUsageServiceClient) GetAggregatedSummary(ctx context.Context, in *Ge
 	return out, nil
 }
 
+func (c *aPIUsageServiceClient) GetUsageData(ctx context.Context, in *GetUsageDataRequest, opts ...grpc.CallOption) (*UsageData, error) {
+	out := new(UsageData)
+	err := c.cc.Invoke(ctx, "/llmariner.apiusage.server.v1.APIUsageService/GetUsageData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *aPIUsageServiceClient) ListUsageData(ctx context.Context, in *ListUsageDataRequest, opts ...grpc.CallOption) (*ListUsageDataResponse, error) {
+	out := new(ListUsageDataResponse)
+	err := c.cc.Invoke(ctx, "/llmariner.apiusage.server.v1.APIUsageService/ListUsageData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // APIUsageServiceServer is the server API for APIUsageService service.
 // All implementations must embed UnimplementedAPIUsageServiceServer
 // for forward compatibility
 type APIUsageServiceServer interface {
 	GetAggregatedSummary(context.Context, *GetAggregatedSummaryRequest) (*AggregatedSummary, error)
+	GetUsageData(context.Context, *GetUsageDataRequest) (*UsageData, error)
+	ListUsageData(context.Context, *ListUsageDataRequest) (*ListUsageDataResponse, error)
 	mustEmbedUnimplementedAPIUsageServiceServer()
 }
 
@@ -52,6 +74,12 @@ type UnimplementedAPIUsageServiceServer struct {
 
 func (UnimplementedAPIUsageServiceServer) GetAggregatedSummary(context.Context, *GetAggregatedSummaryRequest) (*AggregatedSummary, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAggregatedSummary not implemented")
+}
+func (UnimplementedAPIUsageServiceServer) GetUsageData(context.Context, *GetUsageDataRequest) (*UsageData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsageData not implemented")
+}
+func (UnimplementedAPIUsageServiceServer) ListUsageData(context.Context, *ListUsageDataRequest) (*ListUsageDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUsageData not implemented")
 }
 func (UnimplementedAPIUsageServiceServer) mustEmbedUnimplementedAPIUsageServiceServer() {}
 
@@ -84,6 +112,42 @@ func _APIUsageService_GetAggregatedSummary_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _APIUsageService_GetUsageData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsageDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIUsageServiceServer).GetUsageData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.apiusage.server.v1.APIUsageService/GetUsageData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIUsageServiceServer).GetUsageData(ctx, req.(*GetUsageDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _APIUsageService_ListUsageData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUsageDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIUsageServiceServer).ListUsageData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.apiusage.server.v1.APIUsageService/ListUsageData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIUsageServiceServer).ListUsageData(ctx, req.(*ListUsageDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // APIUsageService_ServiceDesc is the grpc.ServiceDesc for APIUsageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +158,14 @@ var APIUsageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAggregatedSummary",
 			Handler:    _APIUsageService_GetAggregatedSummary_Handler,
+		},
+		{
+			MethodName: "GetUsageData",
+			Handler:    _APIUsageService_GetUsageData_Handler,
+		},
+		{
+			MethodName: "ListUsageData",
+			Handler:    _APIUsageService_ListUsageData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

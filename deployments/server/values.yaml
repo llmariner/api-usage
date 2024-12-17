@@ -47,12 +47,48 @@ global:
     # The key name with a password set.
     key: password
 
+  # Manages the authentication and RBAC settings for the endpoints of
+  # the public and worker service APIs.
+  auth:
+    # The flag to enable auth.
+    enable: true
+    # The address for the rbac-server to use API auth.
+    rbacInternalServerAddr: rbac-server-internal-grpc:8082
+  
+  ingress:
+    # The Ingress class name.
+    ingressClassName: kong
+
+    # Optional additional annotations to add to the Ingress.
+    # +docs:property
+    # annotations: {}
+
+    # If specified, the API accessed via Ingress will be enabled for TLS.
+    # For more information, see [Enable TLS](https://llmariner.ai/docs/setup/install/single_cluster_production/#optional-enable-tls).
+    #
+    # For example:
+    # tls:
+    #   hosts:
+    #   - api.llm.mydomain.com
+    #   secretName: api-tls
+    #
+    # +docs:property
+    # tls:
+    #   hosts: []
+    #   secretName: ""
+
 # +docs:section=Server
 
 database:
   # The database name for storing the api-usage-server data.
   database: api_usage
 
+# The HTTP port number for the public service.
+# +docs:type=number
+httpPort: 8080
+# The GRPC port number for the public service.
+# +docs:type=number
+grpcPort: 8081
 # The GRPC port number for the admin service.
 # +docs:type=number
 adminGrpcPort: 8084
