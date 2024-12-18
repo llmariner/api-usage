@@ -15,8 +15,66 @@
   "produces": [
     "application/json"
   ],
-  "paths": {},
+  "paths": {
+    "/v1/api_usages": {
+      "get": {
+        "operationId": "APIUsageService_ListUsageData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUsageDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "startTime",
+            "description": "start_time is the UNIX timestamp for the data start time (inclusive).\nIf start_time is not provided, the default is the 24 hours before end_time.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "endTime",
+            "description": "end_time is the UNIX timestamp for the data end time (exclusive).\nIf end_time is not provided, the default is the current time.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "APIUsageService"
+        ]
+      }
+    }
+  },
   "definitions": {
+    "GetUsageDataRequestFilter": {
+      "type": "object",
+      "properties": {
+        "apiKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -58,6 +116,17 @@
         }
       }
     },
+    "v1ListUsageDataResponse": {
+      "type": "object",
+      "properties": {
+        "usages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1UsageDataByGroup"
+          }
+        }
+      }
+    },
     "v1Summary": {
       "type": "object",
       "properties": {
@@ -79,6 +148,98 @@
         "averageLatency": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "v1UsageData": {
+      "type": "object",
+      "properties": {
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1UsageDataPoint"
+          }
+        }
+      }
+    },
+    "v1UsageDataByGroup": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "apiKeyId": {
+          "type": "string"
+        },
+        "modelId": {
+          "type": "string"
+        },
+        "totalRequests": {
+          "type": "string",
+          "format": "int64"
+        },
+        "avgLatencyMs": {
+          "type": "number",
+          "format": "double"
+        },
+        "avgTimeToFirstTokenMs": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalPromptTokens": {
+          "type": "string",
+          "format": "int64"
+        },
+        "totalCompletionTokens": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1UsageDataPoint": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "apiKeyId": {
+          "type": "string"
+        },
+        "apiMethod": {
+          "type": "string"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "int64"
+        },
+        "latencyMs": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "modelId": {
+          "type": "string"
+        },
+        "timeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "promptTokens": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "completionTokens": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     }
