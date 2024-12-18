@@ -2,16 +2,24 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/go-logr/stdr"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	v1 "github.com/llmariner/api-usage/api/v1"
 	"github.com/llmariner/api-usage/server/internal/cleaner"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/server"
 	"github.com/llmariner/api-usage/server/internal/store"
 	"github.com/llmariner/common/pkg/db"
+	"github.com/llmariner/rbac-manager/pkg/auth"
 	"github.com/spf13/cobra"
-	"golang.org/x/sync/errgroup"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func runCmd() *cobra.Command {
@@ -63,10 +71,53 @@ func run(ctx context.Context, c *config.Config) error {
 	log.Info("Setting up the server...")
 	asrv := server.NewAdmin(st, logger)
 	isrv := server.NewInternal(st, logger)
+	srv := server.New(st, logger)
 
-	eg, ctx := errgroup.WithContext(ctx)
-	eg.Go(func() error { return asrv.Run(ctx, c.AdminGRPCPort) })
-	eg.Go(func() error { return isrv.Run(ctx, c.InternalGRPCPort) })
-	eg.Go(func() error { return cleaner.Run(ctx) })
-	return eg.Wait()
+	addr := fmt.Sprintf("localhost:%d", c.GRPCPort)
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	conn, err := grpc.NewClient(addr, opts...)
+	if err != nil {
+		return err
+	}
+	mux := runtime.NewServeMux(
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+			MarshalOptions: protojson.MarshalOptions{
+				UseProtoNames:     true,
+				EmitDefaultValues: true,
+			},
+			UnmarshalOptions: protojson.UnmarshalOptions{
+				DiscardUnknown: true,
+			},
+		}),
+		runtime.WithIncomingHeaderMatcher(auth.HeaderMatcher),
+		runtime.WithHealthzEndpoint(grpc_health_v1.NewHealthClient(conn)),
+	)
+	if err := v1.RegisterAPIUsageServiceHandlerFromEndpoint(ctx, mux, addr, opts); err != nil {
+		return err
+	}
+
+	errCh := make(chan error)
+
+	go func() {
+		log.Info("Starting HTTP server...", "port", c.HTTPPort)
+		errCh <- http.ListenAndServe(fmt.Sprintf(":%d", c.HTTPPort), mux)
+	}()
+
+	go func() {
+		errCh <- srv.Run(ctx, c.GRPCPort, c.AuthConfig)
+	}()
+
+	go func() {
+		errCh <- asrv.Run(ctx, c.AdminGRPCPort)
+	}()
+
+	go func() {
+		errCh <- isrv.Run(ctx, c.InternalGRPCPort)
+	}()
+
+	go func() {
+		errCh <- cleaner.Run(ctx)
+	}()
+
+	return <-errCh
 }
