@@ -72,6 +72,7 @@ func (s *Store) GetUsagesByGroups(tenantID string, start, end int64) ([]*UsageBy
 			`AVG(latency_ms) AS average_latency`).
 		Where("tenant = ?", tenantID).
 		Where("timestamp >= ? AND timestamp < ?", start, end).
+		Where("model_id <> ?", "").
 		Group("api_key_id,user_id,model_id").
 		Order("api_key_id,user_id,model_id").
 		Scan(&us).Error; err != nil {

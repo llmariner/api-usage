@@ -120,6 +120,18 @@ func TestGetUsagesByGroups(t *testing.T) {
 			PromptTokens:       100,
 			CompletionTokens:   100,
 		},
+		// empty model ID
+		{
+			Tenant:     "t0",
+			APIMethod:  "GetFoo",
+			StatusCode: 200,
+			Timestamp:  start + 201,
+			LatencyMS:  200,
+
+			UserID:   "u10",
+			APIKeyID: "api_key10",
+			ModelID:  "",
+		},
 	}
 	err := st.CreateUsage(usages...)
 	assert.NoError(t, err)
