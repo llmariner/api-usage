@@ -26,6 +26,22 @@ func (c CleanerConfig) Validate() error {
 	return nil
 }
 
+// CacheConfig is the configuration for the API key and user cache.
+type CacheConfig struct {
+	SyncInterval                  time.Duration `yaml:"syncInterval"`
+	UserManagerServerInternalAddr string        `yaml:"userManagerServerInternalAddr"`
+}
+
+func (c *CacheConfig) validate() error {
+	if c.SyncInterval <= 0 {
+		return fmt.Errorf("syncInterval must be greater than 0")
+	}
+	if c.UserManagerServerInternalAddr == "" {
+		return fmt.Errorf("userManagerServerInternalAddr must be set")
+	}
+	return nil
+}
+
 // AuthConfig is the authentication configuration.
 type AuthConfig struct {
 	Enable                 bool   `yaml:"enable"`
@@ -51,6 +67,8 @@ type Config struct {
 	InternalGRPCPort int           `yaml:"internalGrpcPort"`
 	Cleaner          CleanerConfig `yaml:"cleaner"`
 
+	CacheConfig CacheConfig `yaml:"cache"`
+
 	AuthConfig AuthConfig `yaml:"auth"`
 
 	Database db.Config `yaml:"database"`
@@ -72,6 +90,9 @@ func (c *Config) Validate() error {
 	}
 	if err := c.Cleaner.Validate(); err != nil {
 		return fmt.Errorf("cleaner: %s", err)
+	}
+	if err := c.CacheConfig.validate(); err != nil {
+		return fmt.Errorf("cache: %s", err)
 	}
 	if err := c.AuthConfig.validate(); err != nil {
 		return fmt.Errorf("auth: %s", err)

@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/api-usage/api/v1"
+	"github.com/llmariner/api-usage/server/internal/cache"
 	"github.com/llmariner/api-usage/server/internal/store"
 	"github.com/stretchr/testify/assert"
 )
@@ -24,8 +25,8 @@ func TestListUsageData(t *testing.T) {
 			Timestamp:  start,
 			LatencyMS:  100,
 
-			UserID:   "u0",
-			APIKeyID: "api_key0",
+			UserID:   "iu0",
+			APIKeyID: "api_key_id0",
 			ModelID:  "model0",
 
 			TimeToFirstTokenMS: 10,
@@ -36,15 +37,30 @@ func TestListUsageData(t *testing.T) {
 	err := st.CreateUsage(usages...)
 	assert.NoError(t, err)
 
-	srv := New(st, testr.New(t))
+	cache := &fakeCache{
+		apiKeysByID: map[string]*cache.K{
+			"api_key_id0": {
+				ID:   "api_key_id0",
+				Name: "api_key0",
+			},
+		},
+		usersByInternalID: map[string]*cache.U{
+			"iu0": {
+				ID:         "u0",
+				InternalID: "iu0",
+			},
+		},
+	}
+	srv := New(st, cache, testr.New(t))
 	ctx := fakeAuthInto(context.Background())
 
 	exp := &v1.ListUsageDataResponse{
 		Usages: []*v1.UsageDataByGroup{
 			{
-				ApiKeyId: "api_key0",
-				UserId:   "u0",
-				ModelId:  "model0",
+				UserId:     "u0",
+				ApiKeyId:   "api_key_id0",
+				ApiKeyName: "api_key0",
+				ModelId:    "model0",
 
 				TotalRequests:         1,
 				TotalPromptTokens:     100,
@@ -60,4 +76,19 @@ func TestListUsageData(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, exp, got)
+}
+
+type fakeCache struct {
+	apiKeysByID       map[string]*cache.K
+	usersByInternalID map[string]*cache.U
+}
+
+func (c *fakeCache) GetAPIKeyByID(id string) (*cache.K, bool) {
+	k, ok := c.apiKeysByID[id]
+	return k, ok
+}
+
+func (c *fakeCache) GetUserByInternalID(internalID string) (*cache.U, bool) {
+	u, ok := c.usersByInternalID[internalID]
+	return u, ok
 }

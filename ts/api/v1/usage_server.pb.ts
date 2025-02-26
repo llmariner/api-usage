@@ -64,6 +64,7 @@ export type ListUsageDataRequest = {
 export type UsageDataByGroup = {
   user_id?: string
   api_key_id?: string
+  api_key_name?: string
   model_id?: string
   total_requests?: string
   avg_latency_ms?: number

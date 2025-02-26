@@ -86,6 +86,7 @@ message ListUsageDataRequest {
 message UsageDataByGroup {
   string user_id = 1;
   string api_key_id = 2;
+  string api_key_name = 9;
   string model_id = 3;
 
   int64 total_requests = 4;
