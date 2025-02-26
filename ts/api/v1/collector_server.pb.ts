@@ -15,15 +15,15 @@ type OneOf<T> =
         : never)
     : never);
 export type UsageRecord = {
-  userId?: string
+  user_id?: string
   tenant?: string
   organization?: string
   project?: string
-  apiKeyId?: string
-  apiMethod?: string
-  statusCode?: number
+  api_key_id?: string
+  api_method?: string
+  status_code?: number
   timestamp?: string
-  latencyMs?: number
+  latency_ms?: number
   details?: UsageDetails
 }
 
@@ -32,20 +32,20 @@ type BaseUsageDetails = {
 }
 
 export type UsageDetails = BaseUsageDetails
-  & OneOf<{ createChatCompletion: CreateChatCompletion; createCompletion: CreateCompletion }>
+  & OneOf<{ create_chat_completion: CreateChatCompletion; create_completion: CreateCompletion }>
 
 export type CreateChatCompletion = {
-  modelId?: string
-  timeToFirstTokenMs?: number
-  promptTokens?: number
-  completionTokens?: number
+  model_id?: string
+  time_to_first_token_ms?: number
+  prompt_tokens?: number
+  completion_tokens?: number
 }
 
 export type CreateCompletion = {
-  modelId?: string
-  timeToFirstTokenMs?: number
-  promptTokens?: number
-  completionTokens?: number
+  model_id?: string
+  time_to_first_token_ms?: number
+  prompt_tokens?: number
+  completion_tokens?: number
 }
 
 export type CreateUsageRequest = {

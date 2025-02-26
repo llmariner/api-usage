@@ -6,70 +6,70 @@
 
 import * as fm from "../../fetch.pb"
 export type GetAggregatedSummaryRequest = {
-  tenantId?: string
-  startTime?: string
-  endTime?: string
+  tenant_id?: string
+  start_time?: string
+  end_time?: string
 }
 
 export type Summary = {
   method?: string
-  totalRequests?: string
-  successRequests?: string
-  failureRequests?: string
-  averageLatency?: number
+  total_requests?: string
+  success_requests?: string
+  failure_requests?: string
+  average_latency?: number
 }
 
 export type AggregatedSummary = {
   summary?: Summary
-  methodSummaries?: Summary[]
+  method_summaries?: Summary[]
 }
 
 export type GetUsageDataRequestFilter = {
-  apiKeys?: string[]
+  api_keys?: string[]
   models?: string[]
 }
 
 export type GetUsageDataRequest = {
-  startTime?: string
-  endTime?: string
+  start_time?: string
+  end_time?: string
   filter?: GetUsageDataRequestFilter
   after?: string
   limit?: number
 }
 
 export type UsageData = {
-  dataPoints?: UsageDataPoint[]
+  data_points?: UsageDataPoint[]
 }
 
 export type UsageDataPoint = {
-  userId?: string
+  user_id?: string
   organization?: string
   project?: string
-  apiKeyId?: string
-  apiMethod?: string
-  statusCode?: number
+  api_key_id?: string
+  api_method?: string
+  status_code?: number
   timestamp?: string
-  latencyMs?: number
-  modelId?: string
-  timeToFirstTokenMs?: number
-  promptTokens?: number
-  completionTokens?: number
+  latency_ms?: number
+  model_id?: string
+  time_to_first_token_ms?: number
+  prompt_tokens?: number
+  completion_tokens?: number
 }
 
 export type ListUsageDataRequest = {
-  startTime?: string
-  endTime?: string
+  start_time?: string
+  end_time?: string
 }
 
 export type UsageDataByGroup = {
-  userId?: string
-  apiKeyId?: string
-  modelId?: string
-  totalRequests?: string
-  avgLatencyMs?: number
-  avgTimeToFirstTokenMs?: number
-  totalPromptTokens?: string
-  totalCompletionTokens?: string
+  user_id?: string
+  api_key_id?: string
+  model_id?: string
+  total_requests?: string
+  avg_latency_ms?: number
+  avg_time_to_first_token_ms?: number
+  total_prompt_tokens?: string
+  total_completion_tokens?: string
 }
 
 export type ListUsageDataResponse = {
