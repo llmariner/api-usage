@@ -171,6 +171,9 @@
         "apiKeyId": {
           "type": "string"
         },
+        "apiKeyName": {
+          "type": "string"
+        },
         "modelId": {
           "type": "string"
         },

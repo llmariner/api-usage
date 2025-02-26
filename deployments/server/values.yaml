@@ -54,7 +54,7 @@ global:
     enable: true
     # The address for the rbac-server to use API auth.
     rbacInternalServerAddr: rbac-server-internal-grpc:8082
-  
+
   ingress:
     # The Ingress class name.
     ingressClassName: kong
@@ -103,6 +103,14 @@ cleaner:
   # The retention period in time duration for the database.
   # +docs:type=string
   retentionPeriod: 720h
+
+# Specify the cache settings for the API key and user information.
+cache:
+  # The interval time for cache synchronization.
+  syncInterval: 10s
+  # The address of the user-manager-server to call user APIs for data sync.
+  userManagerServerInternalAddr: user-manager-server-internal-grpc:8082
+
 # Override the "api-usage-server.fullname" value. This value is used as part of
 # most of the names of the resources created by this Helm chart.
 # +docs:property

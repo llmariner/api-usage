@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/api-usage/api/v1"
+	"github.com/llmariner/api-usage/server/internal/cache"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/store"
 	"github.com/llmariner/rbac-manager/pkg/auth"
@@ -28,10 +29,16 @@ const (
 	defaultNamespace     = "default"
 )
 
+type cacheGetter interface {
+	GetAPIKeyByID(id string) (*cache.K, bool)
+	GetUserByInternalID(internalID string) (*cache.U, bool)
+}
+
 // New creates a new server.
-func New(store *store.Store, logger logr.Logger) *Server {
+func New(store *store.Store, cache cacheGetter, logger logr.Logger) *Server {
 	return &Server{
 		store:  store,
+		cache:  cache,
 		logger: logger.WithName("server"),
 	}
 }
@@ -42,6 +49,7 @@ type Server struct {
 
 	srv    *grpc.Server
 	store  *store.Store
+	cache  cacheGetter
 	logger logr.Logger
 }
 
@@ -136,8 +144,8 @@ func (s *Server) ListUsageData(ctx context.Context, req *v1.ListUsageDataRequest
 	}
 
 	usProto := make([]*v1.UsageDataByGroup, len(us))
-	for i, s := range us {
-		usProto[i] = usageByGroupToProto(s)
+	for i, u := range us {
+		usProto[i] = s.usageByGroupToProto(u)
 	}
 
 	return &v1.ListUsageDataResponse{
@@ -145,10 +153,29 @@ func (s *Server) ListUsageData(ctx context.Context, req *v1.ListUsageDataRequest
 	}, nil
 }
 
-func usageByGroupToProto(ubg *store.UsageByGroup) *v1.UsageDataByGroup {
+func (s *Server) usageByGroupToProto(ubg *store.UsageByGroup) *v1.UsageDataByGroup {
+	var userID string
+	u, ok := s.cache.GetUserByInternalID(ubg.UserID)
+	if ok {
+		userID = u.ID
+	} else {
+		userID = "unknown"
+	}
+
+	var apiKeyName string
+	if ubg.APIKeyID != "" {
+		k, ok := s.cache.GetAPIKeyByID(ubg.APIKeyID)
+		if ok {
+			apiKeyName = k.Name
+		} else {
+			apiKeyName = "unknown"
+		}
+	}
+
 	return &v1.UsageDataByGroup{
+		UserId:                userID,
 		ApiKeyId:              ubg.APIKeyID,
-		UserId:                ubg.UserID,
+		ApiKeyName:            apiKeyName,
 		ModelId:               ubg.ModelID,
 		TotalRequests:         ubg.TotalRequests,
 		TotalPromptTokens:     ubg.TotalPromptTokens,

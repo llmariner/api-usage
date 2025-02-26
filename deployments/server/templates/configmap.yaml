@@ -13,6 +13,9 @@ data:
     cleaner:
       pollInterval: {{ .Values.cleaner.pollInterval }}
       retentionPeriod: {{ .Values.cleaner.retentionPeriod }}
+    cache:
+      syncInterval: {{ .Values.cache.syncInterval }}
+      userManagerServerInternalAddr: {{ .Values.cache.userManagerServerInternalAddr }}
     database:
       host: {{ required "global.database.host is required" .Values.global.database.host }}
       port: {{ required "global.database.host is required" .Values.global.database.port }}

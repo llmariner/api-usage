@@ -9,12 +9,14 @@ import (
 	"github.com/go-logr/stdr"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	v1 "github.com/llmariner/api-usage/api/v1"
+	"github.com/llmariner/api-usage/server/internal/cache"
 	"github.com/llmariner/api-usage/server/internal/cleaner"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/server"
 	"github.com/llmariner/api-usage/server/internal/store"
 	"github.com/llmariner/common/pkg/db"
 	"github.com/llmariner/rbac-manager/pkg/auth"
+	uv1 "github.com/llmariner/user-manager/api/v1"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -64,6 +66,17 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
+	conn, err := grpc.NewClient(
+		c.CacheConfig.UserManagerServerInternalAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		return err
+	}
+	uClient := uv1.NewUsersInternalServiceClient(conn)
+
+	cstore := cache.NewStore(uClient)
+
 	// TODO(guangrui): Make cleaner as a separate deployment.
 	log.Info("Setting up cleaner...")
 	cleaner := cleaner.NewCleaner(st, c.Cleaner.RetentionPeriod, c.Cleaner.PollInterval, logger)
@@ -71,11 +84,11 @@ func run(ctx context.Context, c *config.Config) error {
 	log.Info("Setting up the server...")
 	asrv := server.NewAdmin(st, logger)
 	isrv := server.NewInternal(st, logger)
-	srv := server.New(st, logger)
+	srv := server.New(st, cstore, logger)
 
 	addr := fmt.Sprintf("localhost:%d", c.GRPCPort)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	conn, err := grpc.NewClient(addr, opts...)
+	conn, err = grpc.NewClient(addr, opts...)
 	if err != nil {
 		return err
 	}
@@ -113,6 +126,10 @@ func run(ctx context.Context, c *config.Config) error {
 
 	go func() {
 		errCh <- isrv.Run(ctx, c.InternalGRPCPort)
+	}()
+
+	go func() {
+		errCh <- cstore.Sync(ctx, c.CacheConfig.SyncInterval)
 	}()
 
 	go func() {
