@@ -129,7 +129,7 @@ func (s *Server) ListUsageData(ctx context.Context, req *v1.ListUsageDataRequest
 
 	now := time.Now()
 	if req.StartTime == 0 {
-		req.StartTime = now.Add(-24 * time.Hour).UnixNano()
+		req.StartTime = now.Add(-31 * 24 * time.Hour).UnixNano()
 	}
 	if req.EndTime == 0 {
 		req.EndTime = now.UnixNano()
