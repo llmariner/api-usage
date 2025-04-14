@@ -8,7 +8,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0
 	github.com/llmariner/common v0.15.0
 	github.com/llmariner/rbac-manager v1.5.0
-	github.com/llmariner/user-manager v1.11.0
+	github.com/llmariner/user-manager v1.16.0
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.10.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241216192217-9240e9c98484

@@ -35,8 +35,8 @@ github.com/llmariner/common v0.15.0 h1:KkDDKXcFPMlCNOZG1vK1nKd05FYagf7CRmPtRO42h
 github.com/llmariner/common v0.15.0/go.mod h1:nt793i6mCLc3tpIA223EvxHLuHa/8Ft+oa4h8m5EWKE=
 github.com/llmariner/rbac-manager v1.5.0 h1:rQEckTzapMhKiFDOU2J0gYBqr+piBDcgGHeItg2x1K8=
 github.com/llmariner/rbac-manager v1.5.0/go.mod h1:6Ogn/a4DG/kxTLyvQ8phEMVjqkp9n880jkGD7utwv64=
-github.com/llmariner/user-manager v1.11.0 h1:1qar0ibepWF40DqoCDE95ZOXNYVhFNrWjlM1b9SNSjw=
-github.com/llmariner/user-manager v1.11.0/go.mod h1:Ct8P7m10YWYt3q4QyKp5mpflTRTa6sNui1btGPIDekY=
+github.com/llmariner/user-manager v1.16.0 h1:IV5NJBPZuYAbhZUp8WwRjcniPrumSG2U2nQbgeS0nyY=
+github.com/llmariner/user-manager v1.16.0/go.mod h1:7ZYhWrKP59Qjmnoz2LFXTs5Qx8QkSL1OG+wZ1gJrUJw=
 github.com/mattn/go-sqlite3 v1.14.17 h1:mCRHCLDUBXgpKAqIKsaAaAsrAlbkeomtRFKXh2L6YIM=
 github.com/mattn/go-sqlite3 v1.14.17/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

@@ -20,6 +20,7 @@ type K struct {
 type U struct {
 	ID         string
 	InternalID string
+	Hidden     bool
 }
 
 type userInfoLister interface {
@@ -123,6 +124,7 @@ func (c *Store) updateCache(ctx context.Context) error {
 		u[user.InternalId] = &U{
 			ID:         user.Id,
 			InternalID: user.InternalId,
+			Hidden:     user.Hidden,
 		}
 	}
 
