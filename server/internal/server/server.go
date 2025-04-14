@@ -145,7 +145,11 @@ func (s *Server) ListUsageData(ctx context.Context, req *v1.ListUsageDataRequest
 
 	usProto := make([]*v1.UsageDataByGroup, len(us))
 	for i, u := range us {
-		usProto[i] = s.usageByGroupToProto(u)
+		up, ok := s.usageByGroupToProto(u)
+		if !ok {
+			continue
+		}
+		usProto[i] = up
 	}
 
 	return &v1.ListUsageDataResponse{
@@ -153,11 +157,16 @@ func (s *Server) ListUsageData(ctx context.Context, req *v1.ListUsageDataRequest
 	}, nil
 }
 
-func (s *Server) usageByGroupToProto(ubg *store.UsageByGroup) *v1.UsageDataByGroup {
+func (s *Server) usageByGroupToProto(ubg *store.UsageByGroup) (*v1.UsageDataByGroup, bool) {
 	var userID string
 	u, ok := s.cache.GetUserByInternalID(ubg.UserID)
 	if ok {
+		if u.Hidden {
+			return nil, false
+		}
+
 		userID = u.ID
+
 	} else {
 		userID = "unknown"
 	}
@@ -182,5 +191,5 @@ func (s *Server) usageByGroupToProto(ubg *store.UsageByGroup) *v1.UsageDataByGro
 		TotalCompletionTokens: ubg.TotalCompletionTokens,
 		AvgLatencyMs:          ubg.AverageLatency,
 		AvgTimeToFirstTokenMs: ubg.AverageTimeToFirstToken,
-	}
+	}, true
 }
