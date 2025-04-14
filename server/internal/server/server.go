@@ -143,17 +143,17 @@ func (s *Server) ListUsageData(ctx context.Context, req *v1.ListUsageDataRequest
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	usProto := make([]*v1.UsageDataByGroup, len(us))
-	for i, u := range us {
+	var usages []*v1.UsageDataByGroup
+	for _, u := range us {
 		up, ok := s.usageByGroupToProto(u)
 		if !ok {
 			continue
 		}
-		usProto[i] = up
+		usages = append(usages, up)
 	}
 
 	return &v1.ListUsageDataResponse{
-		Usages: usProto,
+		Usages: usages,
 	}, nil
 }
 
