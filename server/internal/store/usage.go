@@ -7,7 +7,7 @@ type Usage struct {
 	gorm.Model
 
 	UserID       string `gorm:"uniqueIndex:idx_user_ts"`
-	Tenant       string
+	Tenant       string `gorm:"index:idx_tenant_ts"`
 	Organization string
 	Project      string
 
@@ -15,7 +15,7 @@ type Usage struct {
 
 	APIMethod  string
 	StatusCode int32
-	Timestamp  int64 `gorm:"uniqueIndex:idx_user_ts"`
+	Timestamp  int64 `gorm:"uniqueIndex:idx_user_ts;index:idx_tenant_ts"`
 	LatencyMS  int32
 
 	// The following fields are used for chat completions and completions.
