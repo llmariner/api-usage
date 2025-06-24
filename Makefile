@@ -31,8 +31,11 @@ install-helm-tool:
 .PHONY: generate-chart-schema
 generate-chart-schema: check-helm-tool
 	@cd ./deployments/server && helm-tool schema > values.schema.json
+	@cd ./deployments/cleaner && helm-tool schema > values.schema.json
 
 .PHONY: helm-lint
 helm-lint: generate-chart-schema
 	cd ./deployments/server && helm-tool lint
 	helm lint ./deployments/server
+	cd ./deployments/cleaner && helm-tool lint
+	helm lint ./deployments/cleaner

@@ -91,6 +91,10 @@ jobs:
       run: |
         helm package --version ${{ env.version }} ./deployments/server
         helm push api-usage-server-${{ env.version }}.tgz oci://public.ecr.aws/cloudnatix/llmariner-charts
+    - name: Build and publish api-usage-cleaner helm chart
+      run: |
+        helm package --version ${{ env.version }} ./deployments/cleaner
+        helm push api-usage-cleaner-${{ env.version }}.tgz oci://public.ecr.aws/cloudnatix/llmariner-charts
     - name: Create release
       uses: softprops/action-gh-release@v2.0.8
       with:
