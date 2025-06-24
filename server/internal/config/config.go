@@ -13,6 +13,7 @@ import (
 type CleanerConfig struct {
 	RetentionPeriod time.Duration `yaml:"retentionPeriod"`
 	PollInterval    time.Duration `yaml:"pollInterval"`
+	Database        db.Config     `yaml:"database"`
 }
 
 // Validate validates the configuration.
@@ -23,7 +24,24 @@ func (c CleanerConfig) Validate() error {
 	if c.PollInterval <= 0 {
 		return fmt.Errorf("pollInterval must be greater than 0")
 	}
+	if err := c.Database.Validate(); err != nil {
+		return fmt.Errorf("database: %s", err)
+	}
 	return nil
+}
+
+// ParseCleaner parses the configuration file at the given path, returning a new
+// Config struct.
+func ParseCleaner(path string) (*CleanerConfig, error) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("config: read: %s", err)
+	}
+	var config CleanerConfig
+	if err = yaml.Unmarshal(b, &config); err != nil {
+		return nil, fmt.Errorf("config: unmarshal: %s", err)
+	}
+	return &config, nil
 }
 
 // CacheConfig is the configuration for the API key and user cache.
@@ -61,11 +79,10 @@ func (c *AuthConfig) validate() error {
 
 // Config is the configuration.
 type Config struct {
-	AdminGRPCPort    int           `yaml:"adminGrpcPort"`
-	GRPCPort         int           `yaml:"grpcPort"`
-	HTTPPort         int           `yaml:"httpPort"`
-	InternalGRPCPort int           `yaml:"internalGrpcPort"`
-	Cleaner          CleanerConfig `yaml:"cleaner"`
+	AdminGRPCPort    int `yaml:"adminGrpcPort"`
+	GRPCPort         int `yaml:"grpcPort"`
+	HTTPPort         int `yaml:"httpPort"`
+	InternalGRPCPort int `yaml:"internalGrpcPort"`
 
 	CacheConfig CacheConfig `yaml:"cache"`
 
@@ -87,9 +104,6 @@ func (c *Config) Validate() error {
 	}
 	if c.InternalGRPCPort <= 0 {
 		return fmt.Errorf("grpcPort must be greater than 0")
-	}
-	if err := c.Cleaner.Validate(); err != nil {
-		return fmt.Errorf("cleaner: %s", err)
 	}
 	if err := c.CacheConfig.validate(); err != nil {
 		return fmt.Errorf("cache: %s", err)

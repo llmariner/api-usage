@@ -10,7 +10,6 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	v1 "github.com/llmariner/api-usage/api/v1"
 	"github.com/llmariner/api-usage/server/internal/cache"
-	"github.com/llmariner/api-usage/server/internal/cleaner"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/server"
 	"github.com/llmariner/api-usage/server/internal/store"
@@ -77,10 +76,6 @@ func run(ctx context.Context, c *config.Config) error {
 
 	cstore := cache.NewStore(uClient)
 
-	// TODO(guangrui): Make cleaner as a separate deployment.
-	log.Info("Setting up cleaner...")
-	cleaner := cleaner.NewCleaner(st, c.Cleaner.RetentionPeriod, c.Cleaner.PollInterval, logger)
-
 	log.Info("Setting up the server...")
 	asrv := server.NewAdmin(st, logger)
 	isrv := server.NewInternal(st, logger)
@@ -130,10 +125,6 @@ func run(ctx context.Context, c *config.Config) error {
 
 	go func() {
 		errCh <- cstore.Sync(ctx, c.CacheConfig.SyncInterval)
-	}()
-
-	go func() {
-		errCh <- cleaner.Run(ctx)
 	}()
 
 	return <-errCh

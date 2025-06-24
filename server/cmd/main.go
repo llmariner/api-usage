@@ -13,6 +13,7 @@ func main() {
 		Short: "server",
 	}
 	cmd.AddCommand(runCmd())
+	cmd.AddCommand(cleanerCmd())
 	cmd.SilenceUsage = true
 
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Lshortfile)

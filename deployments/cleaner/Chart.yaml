@@ -1,0 +1,15 @@
+apiVersion: v2
+name: api-usage-cleaner
+description: A Helm chart for API Usage Cleaner service
+home: https://llmariner.ai/
+icon: https://raw.githubusercontent.com/llmariner/llmariner.github.io/refs/heads/main/assets/icons/logo.svg
+type: application
+version: 1.6.1
+appVersion: 1.6.1
+sources:
+  - https://github.com/llmariner/api-usage
+keywords:
+  - llmariner
+annotations:
+  "artifacthub.io/category": ai-machine-learning
+  "artifacthub.io/license": Apache-2.0

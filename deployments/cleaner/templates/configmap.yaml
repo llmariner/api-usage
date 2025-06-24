@@ -1,18 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "api-usage-server.fullname" . }}
+  name: {{ include "api-usage-cleaner.fullname" . }}
   labels:
-    {{- include "api-usage-server.labels" . | nindent 4 }}
+    {{- include "api-usage-cleaner.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    httpPort: {{ .Values.httpPort }}
-    grpcPort: {{ .Values.grpcPort }}
-    adminGrpcPort: {{ .Values.adminGrpcPort }}
-    internalGrpcPort: {{ .Values.internalGrpcPort }}
-    cache:
-      syncInterval: {{ .Values.cache.syncInterval }}
-      userManagerServerInternalAddr: {{ .Values.cache.userManagerServerInternalAddr }}
+    pollInterval: {{ .Values.pollInterval }}
+    retentionPeriod: {{ .Values.retentionPeriod }}
     database:
       host: {{ required "global.database.host is required" .Values.global.database.host }}
       port: {{ required "global.database.port is required" .Values.global.database.port }}
@@ -24,6 +19,3 @@ data:
         rootCert: {{ .Values.global.database.ssl.rootCert }}
       createDatabase: {{ .Values.global.database.createDatabase }}
       originalDatabase: {{ .Values.global.database.originalDatabase }}
-    auth:
-      enable: {{ .Values.global.auth.enable }}
-      rbacInternalServerAddr: {{ .Values.global.auth.rbacInternalServerAddr }}

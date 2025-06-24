@@ -1,15 +1,15 @@
-# Default values for api-usage-server.
+# Default values for api-usage-cleaner.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 # +docs:section=Global
 
 # Global settings are used to share the values among LLMariner components.
-# api-usage-server is a dependency of LLMariner, so global values are
+# api-usage-cleaner is a dependency of LLMariner, so global values are
 # propagated at its installation.
 # Please see https://github.com/llmariner/llmariner/blob/main/deployments/llmariner.
 global:
-  # Specify SQL database info for the server access.
+  # Specify SQL database info for the cleaner access.
   # Currently, only PostgreSQL is supported.
   database:
     # The database host name.
@@ -33,7 +33,7 @@ global:
       # rootCert: ""
 
     # Specify whether to create the database if it does not exist.
-    createDatabase: true
+    createDatabase: false
     # Specify the original database name to connect to before creating
     # the database. If empty, use "template1".
     # +docs:property
@@ -47,79 +47,36 @@ global:
     # The key name with a password set.
     key: password
 
-  # Manages the authentication and RBAC settings for the endpoints of
-  # the public and worker service APIs.
-  auth:
-    # The flag to enable auth.
-    enable: true
-    # The address for the rbac-server to use API auth.
-    rbacInternalServerAddr: rbac-server-internal-grpc:8082
-
-  ingress:
-    # The Ingress class name.
-    ingressClassName: kong
-
-    # Optional additional annotations to add to the Ingress.
-    # +docs:property
-    # annotations: {}
-
-    # If specified, the API accessed via Ingress will be enabled for TLS.
-    # For more information, see [Enable TLS](https://llmariner.ai/docs/setup/install/single_cluster_production/#optional-enable-tls).
-    #
-    # For example:
-    # tls:
-    #   hosts:
-    #   - api.llm.mydomain.com
-    #   secretName: api-tls
-    #
-    # +docs:property
-    # tls:
-    #   hosts: []
-    #   secretName: ""
-
-# +docs:section=Server
-
+# Database configuration for the api-usage-cleaner.
 database:
-  # The database name for storing the api-usage-server data.
+  # The database name.
   database: api_usage
 
-# The HTTP port number for the public service.
-# +docs:type=number
-httpPort: 8080
-# The GRPC port number for the public service.
-# +docs:type=number
-grpcPort: 8081
-# The GRPC port number for the admin service.
-# +docs:type=number
-adminGrpcPort: 8084
-# The GRPC port number for the internal service.
-# +docs:type=number
-internalGrpcPort: 8082
-
-# Specify the cache settings for the API key and user information.
-cache:
-  # The interval time for cache synchronization.
-  syncInterval: 10s
-  # The address of the user-manager-server to call user APIs for data sync.
-  userManagerServerInternalAddr: user-manager-server-internal-grpc:8082
-
-# Override the "api-usage-server.fullname" value. This value is used as part of
+# Override the "api-usage-cleaner.fullname" value. This value is used as part of
 # most of the names of the resources created by this Helm chart.
 # +docs:property
-# fullnameOverride: "my-api-usage-server"
+# fullnameOverride: "my-api-usage-cleaner"
 
-# Override the "api-usage-server.name" value, which is used to annotate some of
+# Override the "api-usage-cleaner.name" value, which is used to annotate some of
 # the resources that are created by this Chart (using "app.kubernetes.io/name").
 # +docs:property
-# nameOverride: "my-api-usage-server"
+# nameOverride: "my-api-usage-cleaner"
 
-# The number of replicas for the api-usage-server Deployment.
+# +docs:section=Deployment
+# Number of replicas to run.
 # +docs:type=number
 replicaCount: 1
 
-# The container image of api-usage-server.
+# The interval in time duration to clean up the database.
+# +docs:type=string
+pollInterval: 1h
+# The retention period in time duration for the database.
+# +docs:type=string
+retentionPeriod: 720h
+
+# Image configuration.
 image:
-  # The container image name.
+  # The container image to use.
   repository: public.ecr.aws/cloudnatix/llmariner/api-usage-server
   # Kubernetes imagePullPolicy on Deployment.
   pullPolicy: IfNotPresent
@@ -141,82 +98,32 @@ image:
 
 # A Kubernetes Affinity, if required.
 # For more information, see [Assigning Pods to Nodes](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node).
-#
-# For example:
-#   affinity:
-#     nodeAffinity:
-#      requiredDuringSchedulingIgnoredDuringExecution:
-#        nodeSelectorTerms:
-#        - matchExpressions:
-#          - key: foo.bar.com/role
-#            operator: In
-#            values:
-#            - master
-#
 # +docs:property
 # affinity: {}
 
 # A list of Kubernetes Tolerations, if required.
 # For more information, see [Taints and Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).
-#
-# For example:
-#   tolerations:
-#   - key: foo.bar.com/role
-#     operator: Equal
-#     value: master
-#     effect: NoSchedule
-#
 # +docs:property
 # tolerations: []
 
-# Resources to provide to the api-usage-server pod.
+# Resources to provide to the api-usage-cleaner pod.
 # For more information, see [Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-Containers/).
-#
-# For example:
-#  requests:
-#    cpu: 10m
-#    memory: 32Mi
-#
 # +docs:property
 resources:
   requests:
-    cpu: "250m"
-    memory: "500Mi"
+    cpu: "100m"
+    memory: "128Mi"
   limits:
-    cpu: "250m"
+    cpu: "100m"
+    memory: "128Mi"
 
-# LivenessProbe settings for the api-usage-server pod.
-# For more information, see [Liveness, Readiness, and Startup Probes](https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/)
-livenessProbe:
-  # Specify whether to enable the liveness probe.
-  enabled: true
-  # Number of seconds after the container has started before startup,
-  # liveness or readiness probes are initiated.
-  # +docs:type=number
-  initialDelaySeconds: 3
-  # How often (in seconds) to perform the probe. Default to 10 seconds.
-  # +docs:type=number
-  periodSeconds: 10
-  # Number of seconds after which the probe times out.
-  # +docs:type=number
-  timeoutSeconds: 15
-  # Minimum consecutive successes for the probe to be considered
-  # successful after having failed.
-  # +docs:type=number
-  successThreshold: 1
-  # After a probe fails `failureThreshold` times in a row, Kubernetes
-  # considers that the overall check has failed: the container is not
-  # ready/healthy/live.
-  # +docs:type=number
-  failureThreshold: 5
-
-# Security Context for the api-usage-server pod.
+# Security Context for the api-usage-cleaner pod.
 # For more information, see [Configure a Security Context for a Pod or Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
 # +docs:property
 podSecurityContext:
   fsGroup: 2000
 
-# Security Context for the api-usage-server container.
+# Security Context for the api-usage-cleaner container.
 # For more information, see [Configure a Security Context for a Pod or Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
 # +docs:property
 securityContext:
@@ -227,11 +134,11 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 1000
 
-# Additional volumes to add to the api-usage-server pod.
+# Additional volumes to add to the api-usage-cleaner pod.
 # +docs:property
 # volumes: []
 
-# Additional volume mounts to add to the api-usage-server container.
+# Additional volume mounts to add to the api-usage-cleaner container.
 # +docs:property
 # volumeMounts: []
 
