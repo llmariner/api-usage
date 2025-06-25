@@ -3,16 +3,17 @@ package store
 import (
 	"testing"
 
+	"github.com/llmariner/api-usage/pkg/store"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAggregatedUsage(t *testing.T) {
-	st, tearDown := NewTest(t)
+	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
 	start := int64(1610000000)
 	end := int64(1610000200)
-	usages := []*Usage{
+	usages := []*store.Usage{
 		{
 			Tenant:     "t0",
 			APIMethod:  "GetFoo",
@@ -65,10 +66,10 @@ func TestAggregatedUsage(t *testing.T) {
 			LatencyMS:  200,
 		},
 	}
-	err := st.CreateUsage(usages...)
+	err := store.CreateUsage(st.DB(), usages...)
 	assert.NoError(t, err)
 
-	result, err := st.AggregatedUsage("t0", start, end)
+	result, err := AggregatedUsage(st, "t0", start, end)
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
 

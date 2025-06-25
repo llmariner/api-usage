@@ -77,7 +77,7 @@ retentionPeriod: 720h
 # Image configuration.
 image:
   # The container image to use.
-  repository: public.ecr.aws/cloudnatix/llmariner/api-usage-server
+  repository: public.ecr.aws/cloudnatix/llmariner/api-usage-cleaner
   # Kubernetes imagePullPolicy on Deployment.
   pullPolicy: IfNotPresent
 

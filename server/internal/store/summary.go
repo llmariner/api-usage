@@ -1,5 +1,9 @@
 package store
 
+import (
+	"github.com/llmariner/api-usage/pkg/store"
+)
+
 // Summary is a struct that represents the summary of the usage data.
 type Summary struct {
 	APIMethod       string
@@ -10,9 +14,9 @@ type Summary struct {
 }
 
 // AggregatedUsage returns the aggregated usage data for the given tenant and time range.
-func (s *Store) AggregatedUsage(tenantID string, start, end int64) ([]Summary, error) {
+func AggregatedUsage(s *store.Store, tenantID string, start, end int64) ([]Summary, error) {
 	var summaries []Summary
-	if err := s.db.Model(&Usage{}).
+	if err := s.DB().Model(&store.Usage{}).
 		Select(
 			`api_method`,
 			`COUNT(*) AS total_requests`,

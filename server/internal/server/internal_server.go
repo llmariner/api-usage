@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/api-usage/api/v1"
-	"github.com/llmariner/api-usage/server/internal/store"
+	"github.com/llmariner/api-usage/pkg/store"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health"
@@ -106,7 +106,7 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 			CompletionTokens:   completionTokens,
 		})
 	}
-	if err := s.store.CreateUsage(records...); err != nil {
+	if err := store.CreateUsage(s.store.DB(), records...); err != nil {
 		return nil, status.Errorf(codes.Internal, "create usage: %s", err)
 	}
 

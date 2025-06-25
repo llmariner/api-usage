@@ -5,14 +5,13 @@ import (
 	"log"
 
 	"github.com/go-logr/stdr"
-	"github.com/llmariner/api-usage/server/internal/cleaner"
-	"github.com/llmariner/api-usage/server/internal/config"
-	"github.com/llmariner/api-usage/server/internal/store"
+	"github.com/llmariner/api-usage/cleaner/internal/cleaner"
+	"github.com/llmariner/api-usage/cleaner/internal/config"
 	"github.com/llmariner/common/pkg/db"
 	"github.com/spf13/cobra"
 )
 
-func cleanerCmd() *cobra.Command {
+func runCmd() *cobra.Command {
 	var path string
 	var logLevel int
 	cmd := &cobra.Command{
@@ -20,7 +19,7 @@ func cleanerCmd() *cobra.Command {
 		Short: "Run the cleaner to delete old records",
 		Long:  "Run the cleaner as a standalone process to delete records outside the retention period",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c, err := config.ParseCleaner(path)
+			c, err := config.Parse(path)
 			if err != nil {
 				return err
 			}
@@ -29,7 +28,7 @@ func cleanerCmd() *cobra.Command {
 			}
 			stdr.SetVerbosity(logLevel)
 
-			if err := runCleaner(cmd.Context(), c); err != nil {
+			if err := run(cmd.Context(), c); err != nil {
 				return err
 			}
 			return nil
@@ -41,7 +40,7 @@ func cleanerCmd() *cobra.Command {
 	return cmd
 }
 
-func runCleaner(ctx context.Context, c *config.CleanerConfig) error {
+func run(ctx context.Context, c *config.Config) error {
 	logger := stdr.New(log.Default())
 	log := logger.WithName("api-usage-cleaner")
 
@@ -50,10 +49,9 @@ func runCleaner(ctx context.Context, c *config.CleanerConfig) error {
 	if err != nil {
 		return err
 	}
-	st := store.New(dbInst)
 
 	log.Info("Setting up cleaner...")
-	cleaner := cleaner.NewCleaner(st, c.RetentionPeriod, c.PollInterval, logger)
+	cleaner := cleaner.NewCleaner(dbInst, c.RetentionPeriod, c.PollInterval, logger)
 
 	log.Info("Running cleaner...")
 	return cleaner.Run(ctx)

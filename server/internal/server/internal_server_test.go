@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/api-usage/api/v1"
-	"github.com/llmariner/api-usage/server/internal/store"
+	"github.com/llmariner/api-usage/pkg/store"
 	"github.com/stretchr/testify/assert"
 )
 

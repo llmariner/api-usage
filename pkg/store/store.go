@@ -22,3 +22,8 @@ func (s *Store) AutoMigrate() error {
 func autoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(&Usage{})
 }
+
+// DB returns the database.
+func (s *Store) DB() *gorm.DB {
+	return s.db
+}
