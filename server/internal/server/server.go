@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/api-usage/api/v1"
+	pkgstore "github.com/llmariner/api-usage/pkg/store"
 	"github.com/llmariner/api-usage/server/internal/cache"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/store"
@@ -35,7 +36,7 @@ type cacheGetter interface {
 }
 
 // New creates a new server.
-func New(store *store.Store, cache cacheGetter, logger logr.Logger) *Server {
+func New(store *pkgstore.Store, cache cacheGetter, logger logr.Logger) *Server {
 	return &Server{
 		store:  store,
 		cache:  cache,
@@ -48,7 +49,7 @@ type Server struct {
 	v1.UnimplementedAPIUsageServiceServer
 
 	srv    *grpc.Server
-	store  *store.Store
+	store  *pkgstore.Store
 	cache  cacheGetter
 	logger logr.Logger
 }
@@ -138,7 +139,7 @@ func (s *Server) ListUsageData(ctx context.Context, req *v1.ListUsageDataRequest
 		return nil, status.Error(codes.InvalidArgument, "end time is before start time")
 	}
 
-	us, err := s.store.GetUsagesByGroups(userInfo.TenantID, req.StartTime, req.EndTime)
+	us, err := store.GetUsagesByGroups(s.store, userInfo.TenantID, req.StartTime, req.EndTime)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

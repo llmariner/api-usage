@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/go-logr/logr/testr"
-	"github.com/llmariner/api-usage/server/internal/store"
+	"github.com/llmariner/api-usage/pkg/store"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,17 +20,17 @@ func TestClearUsage(t *testing.T) {
 			UserID:    fmt.Sprintf("u%d", i),
 			Timestamp: time.Now().Add(dur[i]).UnixNano(),
 		}
-		err := st.CreateUsage(record)
+		err := store.CreateUsage(st.DB(), record)
 		assert.NoError(t, err)
 	}
 
 	retentionPeriod := time.Second * 5
 	interval := time.Second * 10
-	cleaner := NewCleaner(st, retentionPeriod, interval, testr.New(t))
+	cleaner := NewCleaner(st.DB(), retentionPeriod, interval, testr.New(t))
 
 	err := cleaner.clearUsage()
 	assert.NoError(t, err)
-	got, err := st.FindUsages()
+	got, err := store.FindUsages(st.DB())
 	assert.NoError(t, err)
 	assert.Len(t, got, 1)
 
@@ -38,7 +38,7 @@ func TestClearUsage(t *testing.T) {
 
 	err = cleaner.clearUsage()
 	assert.NoError(t, err)
-	got, err = st.FindUsages()
+	got, err = store.FindUsages(st.DB())
 	assert.NoError(t, err)
 	assert.Len(t, got, 0)
 }

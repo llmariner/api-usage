@@ -6,8 +6,8 @@ import (
 
 	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/api-usage/api/v1"
+	"github.com/llmariner/api-usage/pkg/store"
 	"github.com/llmariner/api-usage/server/internal/cache"
-	"github.com/llmariner/api-usage/server/internal/store"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,7 +34,7 @@ func TestListUsageData(t *testing.T) {
 			CompletionTokens:   100,
 		},
 	}
-	err := st.CreateUsage(usages...)
+	err := store.CreateUsage(st.DB(), usages...)
 	assert.NoError(t, err)
 
 	cache := &fakeCache{

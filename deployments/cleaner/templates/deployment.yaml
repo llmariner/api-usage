@@ -28,7 +28,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ default .Chart.Version .Values.version }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
-        - cleaner
+        - run
         - --config
         - /etc/config/config.yaml
         volumeMounts:

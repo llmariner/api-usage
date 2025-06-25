@@ -5,21 +5,22 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
-	"github.com/llmariner/api-usage/server/internal/store"
+	"github.com/llmariner/api-usage/pkg/store"
+	"gorm.io/gorm"
 )
 
 // Cleaner is the struct that deletes records outside the retention period.
 type Cleaner struct {
-	store           *store.Store
+	db              *gorm.DB
 	retentionPeriod time.Duration
 	ticker          *time.Ticker
 	logger          logr.Logger
 }
 
-// NewCleaner returns a new leaner.
-func NewCleaner(store *store.Store, retentionPeriod, interval time.Duration, logger logr.Logger) *Cleaner {
+// NewCleaner returns a new cleaner.
+func NewCleaner(db *gorm.DB, retentionPeriod, interval time.Duration, logger logr.Logger) *Cleaner {
 	return &Cleaner{
-		store:           store,
+		db:              db,
 		retentionPeriod: retentionPeriod,
 		ticker:          time.NewTicker(interval),
 		logger:          logger.WithName("cleaner"),
@@ -52,7 +53,7 @@ func (r *Cleaner) clearUsage() error {
 	t := time.Now().Add(-r.retentionPeriod).UnixNano()
 	const limit = 100
 	for {
-		deleted, err := r.store.DeleteUsage(t, limit)
+		deleted, err := store.DeleteUsage(r.db, t, limit)
 		if err != nil {
 			return err
 		}

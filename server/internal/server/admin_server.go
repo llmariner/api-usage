@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/api-usage/api/v1"
+	pkgstore "github.com/llmariner/api-usage/pkg/store"
 	"github.com/llmariner/api-usage/server/internal/store"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -18,7 +19,7 @@ import (
 )
 
 // NewAdmin creates a new admin server.
-func NewAdmin(store *store.Store, logger logr.Logger) *AdminServer {
+func NewAdmin(store *pkgstore.Store, logger logr.Logger) *AdminServer {
 	return &AdminServer{
 		store:  store,
 		logger: logger.WithName("admin"),
@@ -29,7 +30,7 @@ func NewAdmin(store *store.Store, logger logr.Logger) *AdminServer {
 type AdminServer struct {
 	v1.UnimplementedAPIUsageServiceServer
 
-	store  *store.Store
+	store  *pkgstore.Store
 	logger logr.Logger
 }
 
@@ -74,7 +75,7 @@ func (s *AdminServer) GetAggregatedSummary(ctx context.Context, req *v1.GetAggre
 		req.EndTime = st.UnixNano()
 	}
 
-	summary, err := s.store.AggregatedUsage(req.TenantId, req.StartTime, req.EndTime)
+	summary, err := store.AggregatedUsage(s.store, req.TenantId, req.StartTime, req.EndTime)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

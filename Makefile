@@ -12,13 +12,27 @@ test: go-test-all
 .PHONY: lint
 lint: go-lint-all helm-lint git-clean-check
 
+.PHONY: build-cleaner
+build-cleaner:
+	go build -o ./bin/cleaner ./cleaner/cmd/
+
 .PHONY: build-server
 build-server:
 	go build -o ./bin/server ./server/cmd/
 
+.PHONY: build-docker-cleaner
+build-docker-cleaner:
+	docker build --build-arg TARGETARCH=amd64 -t llmariner/api-usage-cleaner:latest -f build/cleaner/Dockerfile .
+
 .PHONY: build-docker-server
 build-docker-server:
 	docker build --build-arg TARGETARCH=amd64 -t llmariner/api-usage-server:latest -f build/server/Dockerfile .
+
+.PHONY: build-all
+build-all: build-server build-cleaner
+
+.PHONY: build-docker-all
+build-docker-all: build-docker-server build-docker-cleaner
 
 .PHONY: check-helm-tool
 check-helm-tool:
