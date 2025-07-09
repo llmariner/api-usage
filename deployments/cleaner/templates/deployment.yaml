@@ -44,6 +44,13 @@ spec:
             secretKeyRef:
               name: {{ .Values.global.databaseSecret.name }}
               key: {{ .Values.global.databaseSecret.key }}
+        {{- with .Values.apiUsageCleaner.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.apiUsageCleaner.envFrom }}
+        envFrom:
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
       {{- with .Values.nodeSelector }}
