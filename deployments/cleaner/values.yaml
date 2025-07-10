@@ -144,7 +144,7 @@ securityContext:
 
 # Additional environment variables for the api-usage-cleaner container.
 # +docs:property
-# apiUsageCleaner:
+# api-usage-cleaner:
 #   env: []
 #   envFrom: []
 
