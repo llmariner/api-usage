@@ -241,7 +241,7 @@ securityContext:
 
 # Additional environment variables for the api-usage container.
 # +docs:property
-# api-usage:
+# apiUsage:
 #   env: []
 #   envFrom: []
 
