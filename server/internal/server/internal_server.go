@@ -84,6 +84,12 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 				timeToFirstTokenMS = c.TimeToFirstTokenMs
 				promptTokens = c.PromptTokens
 				completionTokens = c.CompletionTokens
+			case *v1.UsageDetails_CreateAudioTranscription:
+				c := d.GetCreateAudioTranscription()
+				modelID = c.ModelId
+				timeToFirstTokenMS = c.TimeToFirstTokenMs
+				promptTokens = c.InputTokens
+				completionTokens = c.OutputTokens
 			default:
 				return nil, status.Errorf(codes.InvalidArgument, "invalid details")
 			}

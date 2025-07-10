@@ -44,6 +44,43 @@
         }
       }
     },
+    "v1CreateAudioTranscription": {
+      "type": "object",
+      "properties": {
+        "modelId": {
+          "type": "string"
+        },
+        "timeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query."
+        },
+        "inputTokens": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "outputTokens": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalTokens": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "textTokens": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "audioTokens": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "inputDurationSeconds": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "v1CreateChatCompletion": {
       "type": "object",
       "properties": {
@@ -101,6 +138,9 @@
         },
         "createCompletion": {
           "$ref": "#/definitions/v1CreateCompletion"
+        },
+        "createAudioTranscription": {
+          "$ref": "#/definitions/v1CreateAudioTranscription"
         }
       }
     },
