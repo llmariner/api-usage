@@ -22,7 +22,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-      - name: apiUsageCleaner
+      - name: api-usage-cleaner
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ default .Chart.Version .Values.version }}"
