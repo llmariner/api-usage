@@ -32,7 +32,7 @@ type BaseUsageDetails = {
 }
 
 export type UsageDetails = BaseUsageDetails
-  & OneOf<{ create_chat_completion: CreateChatCompletion; create_completion: CreateCompletion }>
+  & OneOf<{ create_chat_completion: CreateChatCompletion; create_completion: CreateCompletion; create_audio_transcription: CreateAudioTranscription }>
 
 export type CreateChatCompletion = {
   model_id?: string
@@ -46,6 +46,17 @@ export type CreateCompletion = {
   time_to_first_token_ms?: number
   prompt_tokens?: number
   completion_tokens?: number
+}
+
+export type CreateAudioTranscription = {
+  model_id?: string
+  time_to_first_token_ms?: number
+  input_tokens?: number
+  output_tokens?: number
+  total_tokens?: number
+  text_tokens?: number
+  audio_tokens?: number
+  input_duration_seconds?: number
 }
 
 export type CreateUsageRequest = {
