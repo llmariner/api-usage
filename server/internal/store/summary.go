@@ -64,6 +64,7 @@ func ListModelUsageSummaries(
 			"COUNT(*) AS total_requests",
 		).
 		Where("tenant = ?", tenantID).
+		Where("model_id != ''"). // Exclude non-model related usage
 		Where("timestamp >= ? AND timestamp < ?", startTime.Unix(), endTime.Unix()).
 		Group("user_id, model_id, truncated_timestamp").
 		Scan(&us).Error; err != nil {
