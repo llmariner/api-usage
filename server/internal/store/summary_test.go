@@ -2,6 +2,7 @@ package store
 
 import (
 	"testing"
+	"time"
 
 	"github.com/llmariner/api-usage/common/pkg/store"
 	"github.com/stretchr/testify/assert"
@@ -84,4 +85,101 @@ func TestAggregatedUsage(t *testing.T) {
 	assert.Equal(t, int64(2), result[1].SuccessRequests)
 	assert.Equal(t, int64(0), result[1].FailureRequests)
 	assert.Equal(t, float64(200), result[1].AverageLatency) // avg(300 + 100)
+}
+
+func TestListModelUsageSummaries(t *testing.T) {
+	st, tearDown := store.NewTest(t)
+	defer tearDown()
+
+	ts := time.Date(2025, 7, 10, 0, 0, 0, 0, time.UTC)
+	usages := []*store.Usage{
+		{
+			Tenant:    "t0",
+			ModelID:   "model0",
+			UserID:    "user0",
+			Timestamp: ts.Unix(),
+		},
+		// differnet model
+		{
+			Tenant:    "t0",
+			ModelID:   "model1",
+			UserID:    "user0",
+			Timestamp: ts.Add(10 * time.Minute).Unix(),
+		},
+		// different user
+		{
+			Tenant:    "t0",
+			ModelID:   "model1",
+			UserID:    "user1",
+			Timestamp: ts.Add(20 * time.Minute).Unix(),
+		},
+		// different tenant
+		{
+			Tenant:    "t1",
+			ModelID:   "model2",
+			UserID:    "user2",
+			Timestamp: ts.Add(20 * time.Minute).Unix(),
+		},
+		// different timestamp
+		{
+			Tenant:    "t0",
+			ModelID:   "model0",
+			UserID:    "user0",
+			Timestamp: ts.Add(1*time.Hour + 1*time.Minute).Unix(),
+		},
+		{
+			Tenant:    "t0",
+			ModelID:   "model0",
+			UserID:    "user0",
+			Timestamp: ts.Add(1*time.Hour + 30*time.Minute).Unix(),
+		},
+		{
+			Tenant:    "t0",
+			ModelID:   "model0",
+			UserID:    "user0",
+			Timestamp: ts.Add(2*time.Hour + 10*time.Minute).Unix(),
+		},
+	}
+	err := store.CreateUsage(st.DB(), usages...)
+	assert.NoError(t, err)
+
+	startTime := ts
+	endTime := ts.Add(24 * time.Hour)
+	got, err := ListModelUsageSummaries(st, "t0", startTime, endTime, time.Hour)
+	assert.NoError(t, err)
+
+	want := []*ModelUsageSummary{
+		{
+			ModelID:            "model0",
+			UserID:             "user0",
+			TruncatedTimestamp: ts.Unix(),
+			TotalRequests:      1,
+		},
+		{
+			ModelID:            "model0",
+			UserID:             "user0",
+			TruncatedTimestamp: ts.Add(1 * time.Hour).Unix(),
+			TotalRequests:      2,
+		},
+		{
+			ModelID:            "model0",
+			UserID:             "user0",
+			TruncatedTimestamp: ts.Add(2 * time.Hour).Unix(),
+			TotalRequests:      1,
+		},
+		{
+			ModelID:            "model1",
+			UserID:             "user0",
+			TruncatedTimestamp: ts.Unix(),
+			TotalRequests:      1,
+		},
+		{
+			ModelID:            "model1",
+			UserID:             "user1",
+			TruncatedTimestamp: ts.Unix(),
+			TotalRequests:      1,
+		},
+	}
+	assert.ElementsMatch(t, want, got)
+
 }
