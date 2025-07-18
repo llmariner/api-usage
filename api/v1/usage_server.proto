@@ -7,6 +7,13 @@ import "google/api/http.proto";
 
 option go_package = "github.com/llmariner/api-usage/api/v1";
 
+message RequestFilter {
+  // start_timestamp specifies the start time of the snapshot histories (inclusive). Unix timestamp in seconds.
+  int64 start_timestamp = 1;
+  // end_timestamp specifies the end time of the snapshot histories (exclusive). Unix timestamp in seconds.
+  int64 end_timestamp = 2;
+}
+
 message GetAggregatedSummaryRequest {
   string tenant_id = 1;
 
@@ -100,6 +107,26 @@ message ListUsageDataResponse {
   repeated UsageDataByGroup usages = 1;
 }
 
+message ListModelUsageSummariesRequest {
+  RequestFilter filter = 1;
+}
+
+message ListModelUsageSummariesResponse {
+  message Value {
+    string model_id = 1;
+
+    int64 total_requests = 2;
+  }
+
+  message Datapoint {
+    // timestamp is the Unix timestamp in seconds.
+    int64 timestamp = 1;
+    repeated Value values = 2;
+  }
+
+  repeated Datapoint datapoints = 1;
+}
+
 service APIUsageService {
   rpc GetAggregatedSummary(GetAggregatedSummaryRequest) returns (AggregatedSummary);
   rpc GetUsageData(GetUsageDataRequest) returns (UsageData);
@@ -107,6 +134,12 @@ service APIUsageService {
   rpc ListUsageData(ListUsageDataRequest) returns (ListUsageDataResponse) {
     option (google.api.http) = {
       get: "/v1/api_usages"
+    };
+  }
+
+  rpc ListModelUsageSummaries(ListModelUsageSummariesRequest) returns (ListModelUsageSummariesResponse) {
+    option (google.api.http) = {
+      get: "/v1/api-usage/model-usage-summaries"
     };
   }
 }

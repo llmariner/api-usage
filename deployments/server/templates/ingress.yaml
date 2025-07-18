@@ -29,3 +29,10 @@ spec:
             name: {{ include "api-usage-server.fullname" . }}-http
             port:
               number: {{ .Values.httpPort }}
+      - path: /v1/api-usage
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "api-usage-server.fullname" . }}-http
+            port:
+              number: {{ .Values.httpPort }}
