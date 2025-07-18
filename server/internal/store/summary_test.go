@@ -181,5 +181,4 @@ func TestListModelUsageSummaries(t *testing.T) {
 		},
 	}
 	assert.ElementsMatch(t, want, got)
-
 }

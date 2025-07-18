@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	github.com/go-logr/logr v1.4.2
 	github.com/go-logr/stdr v1.2.2
+	github.com/google/go-cmp v0.6.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0
 	github.com/llmariner/common v0.15.0
 	github.com/llmariner/rbac-manager v1.5.0
