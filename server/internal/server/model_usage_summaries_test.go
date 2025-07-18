@@ -29,7 +29,7 @@ func TestListModelUsageSummaries(t *testing.T) {
 			UserID:    "user0",
 			Timestamp: startTime.Unix(),
 		},
-		// differnet model
+		// different model
 		{
 			Tenant:    defaultTenantID,
 			ModelID:   "model1",
