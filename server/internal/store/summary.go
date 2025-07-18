@@ -1,6 +1,9 @@
 package store
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/llmariner/api-usage/common/pkg/store"
 )
 
@@ -30,4 +33,41 @@ func AggregatedUsage(s *store.Store, tenantID string, start, end int64) ([]Summa
 		return nil, err
 	}
 	return summaries, nil
+}
+
+// ModelUsageSummary is a struct that represents the usage summary for a specific model, user and truncated timestamp.
+type ModelUsageSummary struct {
+	UserID  string
+	ModelID string
+
+	TruncatedTimestamp int64
+
+	TotalRequests int64
+}
+
+// ListModelUsageSummaries returns the usage summaries for models grouped by user and truncated by the specified interval.
+func ListModelUsageSummaries(
+	s *store.Store,
+	tenantID string,
+	startTime,
+	endTime time.Time,
+	interval time.Duration,
+) ([]*ModelUsageSummary, error) {
+	intSeconds := int64(interval.Seconds())
+	var us []*ModelUsageSummary
+	if err := s.DB().Model(&store.Usage{}).
+		Select(
+			"model_id",
+			"user_id",
+			// Truncate by interval
+			fmt.Sprintf("timestamp / %d * %d AS truncated_timestamp", intSeconds, intSeconds),
+			"COUNT(*) AS total_requests",
+		).
+		Where("tenant = ?", tenantID).
+		Where("timestamp >= ? AND timestamp < ?", startTime.Unix(), endTime.Unix()).
+		Group("user_id, model_id, truncated_timestamp").
+		Scan(&us).Error; err != nil {
+		return nil, err
+	}
+	return us, nil
 }
