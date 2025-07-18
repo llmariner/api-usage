@@ -69,7 +69,7 @@ func (s *Server) ListModelUsageSummaries(ctx context.Context, req *v1.ListModelU
 
 	var dps []*v1.ListModelUsageSummariesResponse_Datapoint
 	for t := startTime; t.Before(endTime); t = t.Add(defaultInterval) {
-		sums := intervalBuckets[t.Unix()]
+		sums := intervalBuckets[t.UnixNano()]
 		var vs []*v1.ListModelUsageSummariesResponse_Value
 		for _, modelID := range modelIDs {
 			var v int64

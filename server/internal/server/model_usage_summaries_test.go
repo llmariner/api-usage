@@ -27,39 +27,39 @@ func TestListModelUsageSummaries(t *testing.T) {
 			Tenant:    defaultTenantID,
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: startTime.Unix(),
+			Timestamp: startTime.UnixNano(),
 		},
 		// different model
 		{
 			Tenant:    defaultTenantID,
 			ModelID:   "model1",
 			UserID:    "user0",
-			Timestamp: startTime.Add(10 * time.Minute).Unix(),
+			Timestamp: startTime.Add(10 * time.Minute).UnixNano(),
 		},
 		// hidden user
 		{
 			Tenant:    defaultTenantID,
 			ModelID:   "model1",
 			UserID:    "user1",
-			Timestamp: startTime.Add(20 * time.Minute).Unix(),
+			Timestamp: startTime.Add(20 * time.Minute).UnixNano(),
 		},
 		{
 			Tenant:    defaultTenantID,
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: startTime.Add(1*time.Hour + 1*time.Minute).Unix(),
+			Timestamp: startTime.Add(1*time.Hour + 1*time.Minute).UnixNano(),
 		},
 		{
 			Tenant:    defaultTenantID,
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: startTime.Add(1*time.Hour + 30*time.Minute).Unix(),
+			Timestamp: startTime.Add(1*time.Hour + 30*time.Minute).UnixNano(),
 		},
 		{
 			Tenant:    defaultTenantID,
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: startTime.Add(2*time.Hour + 10*time.Minute).Unix(),
+			Timestamp: startTime.Add(2*time.Hour + 10*time.Minute).UnixNano(),
 		},
 	}
 	err := store.CreateUsage(st.DB(), usages...)
