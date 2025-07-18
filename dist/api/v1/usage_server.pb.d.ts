@@ -1,4 +1,8 @@
 import * as fm from "../../fetch.pb";
+export type RequestFilter = {
+    start_timestamp?: string;
+    end_timestamp?: string;
+};
 export type GetAggregatedSummaryRequest = {
     tenant_id?: string;
     start_time?: string;
@@ -61,8 +65,23 @@ export type UsageDataByGroup = {
 export type ListUsageDataResponse = {
     usages?: UsageDataByGroup[];
 };
+export type ListModelUsageSummariesRequest = {
+    filter?: RequestFilter;
+};
+export type ListModelUsageSummariesResponseValue = {
+    model_id?: string;
+    total_requests?: string;
+};
+export type ListModelUsageSummariesResponseDatapoint = {
+    timestamp?: string;
+    values?: ListModelUsageSummariesResponseValue[];
+};
+export type ListModelUsageSummariesResponse = {
+    datapoints?: ListModelUsageSummariesResponseDatapoint[];
+};
 export declare class APIUsageService {
     static GetAggregatedSummary(req: GetAggregatedSummaryRequest, initReq?: fm.InitReq): Promise<AggregatedSummary>;
     static GetUsageData(req: GetUsageDataRequest, initReq?: fm.InitReq): Promise<UsageData>;
     static ListUsageData(req: ListUsageDataRequest, initReq?: fm.InitReq): Promise<ListUsageDataResponse>;
+    static ListModelUsageSummaries(req: ListModelUsageSummariesRequest, initReq?: fm.InitReq): Promise<ListModelUsageSummariesResponse>;
 }

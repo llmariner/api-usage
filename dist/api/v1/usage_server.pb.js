@@ -14,4 +14,7 @@ export class APIUsageService {
     static ListUsageData(req, initReq) {
         return fm.fetchReq(`/v1/api_usages?${fm.renderURLSearchParams(req, [])}`, Object.assign(Object.assign({}, initReq), { method: "GET" }));
     }
+    static ListModelUsageSummaries(req, initReq) {
+        return fm.fetchReq(`/v1/api-usage/model-usage-summaries?${fm.renderURLSearchParams(req, [])}`, Object.assign(Object.assign({}, initReq), { method: "GET" }));
+    }
 }

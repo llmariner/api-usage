@@ -21,6 +21,7 @@ type APIUsageServiceClient interface {
 	GetAggregatedSummary(ctx context.Context, in *GetAggregatedSummaryRequest, opts ...grpc.CallOption) (*AggregatedSummary, error)
 	GetUsageData(ctx context.Context, in *GetUsageDataRequest, opts ...grpc.CallOption) (*UsageData, error)
 	ListUsageData(ctx context.Context, in *ListUsageDataRequest, opts ...grpc.CallOption) (*ListUsageDataResponse, error)
+	ListModelUsageSummaries(ctx context.Context, in *ListModelUsageSummariesRequest, opts ...grpc.CallOption) (*ListModelUsageSummariesResponse, error)
 }
 
 type aPIUsageServiceClient struct {
@@ -58,6 +59,15 @@ func (c *aPIUsageServiceClient) ListUsageData(ctx context.Context, in *ListUsage
 	return out, nil
 }
 
+func (c *aPIUsageServiceClient) ListModelUsageSummaries(ctx context.Context, in *ListModelUsageSummariesRequest, opts ...grpc.CallOption) (*ListModelUsageSummariesResponse, error) {
+	out := new(ListModelUsageSummariesResponse)
+	err := c.cc.Invoke(ctx, "/llmariner.apiusage.server.v1.APIUsageService/ListModelUsageSummaries", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // APIUsageServiceServer is the server API for APIUsageService service.
 // All implementations must embed UnimplementedAPIUsageServiceServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type APIUsageServiceServer interface {
 	GetAggregatedSummary(context.Context, *GetAggregatedSummaryRequest) (*AggregatedSummary, error)
 	GetUsageData(context.Context, *GetUsageDataRequest) (*UsageData, error)
 	ListUsageData(context.Context, *ListUsageDataRequest) (*ListUsageDataResponse, error)
+	ListModelUsageSummaries(context.Context, *ListModelUsageSummariesRequest) (*ListModelUsageSummariesResponse, error)
 	mustEmbedUnimplementedAPIUsageServiceServer()
 }
 
@@ -80,6 +91,9 @@ func (UnimplementedAPIUsageServiceServer) GetUsageData(context.Context, *GetUsag
 }
 func (UnimplementedAPIUsageServiceServer) ListUsageData(context.Context, *ListUsageDataRequest) (*ListUsageDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUsageData not implemented")
+}
+func (UnimplementedAPIUsageServiceServer) ListModelUsageSummaries(context.Context, *ListModelUsageSummariesRequest) (*ListModelUsageSummariesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListModelUsageSummaries not implemented")
 }
 func (UnimplementedAPIUsageServiceServer) mustEmbedUnimplementedAPIUsageServiceServer() {}
 
@@ -148,6 +162,24 @@ func _APIUsageService_ListUsageData_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _APIUsageService_ListModelUsageSummaries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListModelUsageSummariesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIUsageServiceServer).ListModelUsageSummaries(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.apiusage.server.v1.APIUsageService/ListModelUsageSummaries",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIUsageServiceServer).ListModelUsageSummaries(ctx, req.(*ListModelUsageSummariesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // APIUsageService_ServiceDesc is the grpc.ServiceDesc for APIUsageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +198,10 @@ var APIUsageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUsageData",
 			Handler:    _APIUsageService_ListUsageData_Handler,
+		},
+		{
+			MethodName: "ListModelUsageSummaries",
+			Handler:    _APIUsageService_ListModelUsageSummaries_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

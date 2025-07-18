@@ -16,6 +16,46 @@
     "application/json"
   ],
   "paths": {
+    "/v1/api-usage/model-usage-summaries": {
+      "get": {
+        "operationId": "APIUsageService_ListModelUsageSummaries",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListModelUsageSummariesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter.startTimestamp",
+            "description": "start_timestamp specifies the start time of the snapshot histories (inclusive). Unix timestamp in seconds.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "filter.endTimestamp",
+            "description": "end_timestamp specifies the end time of the snapshot histories (exclusive). Unix timestamp in seconds.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "APIUsageService"
+        ]
+      }
+    },
     "/v1/api_usages": {
       "get": {
         "operationId": "APIUsageService_ListUsageData",
@@ -75,6 +115,34 @@
         }
       }
     },
+    "ListModelUsageSummariesResponseDatapoint": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "int64",
+          "description": "timestamp is the Unix timestamp in seconds."
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListModelUsageSummariesResponseValue"
+          }
+        }
+      }
+    },
+    "ListModelUsageSummariesResponseValue": {
+      "type": "object",
+      "properties": {
+        "modelId": {
+          "type": "string"
+        },
+        "totalRequests": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -116,6 +184,17 @@
         }
       }
     },
+    "v1ListModelUsageSummariesResponse": {
+      "type": "object",
+      "properties": {
+        "datapoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListModelUsageSummariesResponseDatapoint"
+          }
+        }
+      }
+    },
     "v1ListUsageDataResponse": {
       "type": "object",
       "properties": {
@@ -124,6 +203,21 @@
           "items": {
             "$ref": "#/definitions/v1UsageDataByGroup"
           }
+        }
+      }
+    },
+    "v1RequestFilter": {
+      "type": "object",
+      "properties": {
+        "startTimestamp": {
+          "type": "string",
+          "format": "int64",
+          "description": "start_timestamp specifies the start time of the snapshot histories (inclusive). Unix timestamp in seconds."
+        },
+        "endTimestamp": {
+          "type": "string",
+          "format": "int64",
+          "description": "end_timestamp specifies the end time of the snapshot histories (exclusive). Unix timestamp in seconds."
         }
       }
     },
