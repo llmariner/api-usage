@@ -97,47 +97,47 @@ func TestListModelUsageSummaries(t *testing.T) {
 			Tenant:    "t0",
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: ts.Unix(),
+			Timestamp: ts.UnixNano(),
 		},
 		// differnet model
 		{
 			Tenant:    "t0",
 			ModelID:   "model1",
 			UserID:    "user0",
-			Timestamp: ts.Add(10 * time.Minute).Unix(),
+			Timestamp: ts.Add(10 * time.Minute).UnixNano(),
 		},
 		// different user
 		{
 			Tenant:    "t0",
 			ModelID:   "model1",
 			UserID:    "user1",
-			Timestamp: ts.Add(20 * time.Minute).Unix(),
+			Timestamp: ts.Add(20 * time.Minute).UnixNano(),
 		},
 		// different tenant
 		{
 			Tenant:    "t1",
 			ModelID:   "model2",
 			UserID:    "user2",
-			Timestamp: ts.Add(20 * time.Minute).Unix(),
+			Timestamp: ts.Add(20 * time.Minute).UnixNano(),
 		},
 		// different timestamp
 		{
 			Tenant:    "t0",
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: ts.Add(1*time.Hour + 1*time.Minute).Unix(),
+			Timestamp: ts.Add(1*time.Hour + 1*time.Minute).UnixNano(),
 		},
 		{
 			Tenant:    "t0",
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: ts.Add(1*time.Hour + 30*time.Minute).Unix(),
+			Timestamp: ts.Add(1*time.Hour + 30*time.Minute).UnixNano(),
 		},
 		{
 			Tenant:    "t0",
 			ModelID:   "model0",
 			UserID:    "user0",
-			Timestamp: ts.Add(2*time.Hour + 10*time.Minute).Unix(),
+			Timestamp: ts.Add(2*time.Hour + 10*time.Minute).UnixNano(),
 		},
 	}
 	err := store.CreateUsage(st.DB(), usages...)
@@ -152,31 +152,31 @@ func TestListModelUsageSummaries(t *testing.T) {
 		{
 			ModelID:            "model0",
 			UserID:             "user0",
-			TruncatedTimestamp: ts.Unix(),
+			TruncatedTimestamp: ts.UnixNano(),
 			TotalRequests:      1,
 		},
 		{
 			ModelID:            "model0",
 			UserID:             "user0",
-			TruncatedTimestamp: ts.Add(1 * time.Hour).Unix(),
+			TruncatedTimestamp: ts.Add(1 * time.Hour).UnixNano(),
 			TotalRequests:      2,
 		},
 		{
 			ModelID:            "model0",
 			UserID:             "user0",
-			TruncatedTimestamp: ts.Add(2 * time.Hour).Unix(),
+			TruncatedTimestamp: ts.Add(2 * time.Hour).UnixNano(),
 			TotalRequests:      1,
 		},
 		{
 			ModelID:            "model1",
 			UserID:             "user0",
-			TruncatedTimestamp: ts.Unix(),
+			TruncatedTimestamp: ts.UnixNano(),
 			TotalRequests:      1,
 		},
 		{
 			ModelID:            "model1",
 			UserID:             "user1",
-			TruncatedTimestamp: ts.Unix(),
+			TruncatedTimestamp: ts.UnixNano(),
 			TotalRequests:      1,
 		},
 	}

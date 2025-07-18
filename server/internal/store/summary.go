@@ -53,19 +53,18 @@ func ListModelUsageSummaries(
 	endTime time.Time,
 	interval time.Duration,
 ) ([]*ModelUsageSummary, error) {
-	intSeconds := int64(interval.Seconds())
 	var us []*ModelUsageSummary
 	if err := s.DB().Model(&store.Usage{}).
 		Select(
 			"model_id",
 			"user_id",
 			// Truncate by interval
-			fmt.Sprintf("timestamp / %d * %d AS truncated_timestamp", intSeconds, intSeconds),
+			fmt.Sprintf("timestamp / %d * %d AS truncated_timestamp", interval.Nanoseconds(), interval.Nanoseconds()),
 			"COUNT(*) AS total_requests",
 		).
 		Where("tenant = ?", tenantID).
 		Where("model_id != ''"). // Exclude non-model related usage
-		Where("timestamp >= ? AND timestamp < ?", startTime.Unix(), endTime.Unix()).
+		Where("timestamp >= ? AND timestamp < ?", startTime.UnixNano(), endTime.UnixNano()).
 		Group("user_id, model_id, truncated_timestamp").
 		Scan(&us).Error; err != nil {
 		return nil, err
