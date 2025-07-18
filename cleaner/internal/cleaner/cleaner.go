@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
-	"github.com/llmariner/api-usage/pkg/store"
+	"github.com/llmariner/api-usage/common/pkg/store"
 	"gorm.io/gorm"
 )
 

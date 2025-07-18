@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/llmariner/api-usage/pkg/store"
+	"github.com/llmariner/api-usage/common/pkg/store"
 )
 
 // Summary is a struct that represents the summary of the usage data.

@@ -1,6 +1,6 @@
 package store
 
-import "github.com/llmariner/api-usage/pkg/store"
+import "github.com/llmariner/api-usage/common/pkg/store"
 
 // UsageByGroup represents the aggregated usage data grouped by API key, user, and model.
 type UsageByGroup struct {

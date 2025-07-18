@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/go-logr/logr/testr"
-	"github.com/llmariner/api-usage/pkg/store"
+	"github.com/llmariner/api-usage/common/pkg/store"
 	"github.com/stretchr/testify/assert"
 )
 

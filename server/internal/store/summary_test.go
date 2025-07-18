@@ -3,7 +3,7 @@ package store
 import (
 	"testing"
 
-	"github.com/llmariner/api-usage/pkg/store"
+	"github.com/llmariner/api-usage/common/pkg/store"
 	"github.com/stretchr/testify/assert"
 )
 

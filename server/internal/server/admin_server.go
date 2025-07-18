@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/api-usage/api/v1"
-	pkgstore "github.com/llmariner/api-usage/pkg/store"
+	pkgstore "github.com/llmariner/api-usage/common/pkg/store"
 	"github.com/llmariner/api-usage/server/internal/store"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

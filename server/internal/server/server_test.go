@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/api-usage/api/v1"
-	"github.com/llmariner/api-usage/pkg/store"
+	"github.com/llmariner/api-usage/common/pkg/store"
 	"github.com/llmariner/api-usage/server/internal/cache"
 	"github.com/stretchr/testify/assert"
 )

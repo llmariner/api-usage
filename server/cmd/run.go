@@ -9,7 +9,7 @@ import (
 	"github.com/go-logr/stdr"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	v1 "github.com/llmariner/api-usage/api/v1"
-	"github.com/llmariner/api-usage/pkg/store"
+	"github.com/llmariner/api-usage/common/pkg/store"
 	"github.com/llmariner/api-usage/server/internal/cache"
 	"github.com/llmariner/api-usage/server/internal/config"
 	"github.com/llmariner/api-usage/server/internal/server"
