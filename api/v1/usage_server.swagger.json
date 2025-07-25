@@ -140,6 +140,14 @@
         "totalRequests": {
           "type": "string",
           "format": "int64"
+        },
+        "totalPromptTokens": {
+          "type": "string",
+          "format": "int64"
+        },
+        "totalCompletionTokens": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

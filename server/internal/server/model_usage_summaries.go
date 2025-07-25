@@ -72,15 +72,22 @@ func (s *Server) ListModelUsageSummaries(ctx context.Context, req *v1.ListModelU
 		sums := intervalBuckets[t.UnixNano()]
 		var vs []*v1.ListModelUsageSummariesResponse_Value
 		for _, modelID := range modelIDs {
-			var v int64
+			var (
+				totalRequests         int64
+				ttotalPromptTokens    int64
+				totalCompletionTokens int64
+			)
 			if sum, ok := sums[modelID]; ok {
-				v = sum.TotalRequests
-			} else {
-				v = 0
+				totalRequests = sum.TotalRequests
+				ttotalPromptTokens = sum.TotalPromptTokens
+				totalCompletionTokens = sum.TotalCompletionTokens
 			}
+
 			vs = append(vs, &v1.ListModelUsageSummariesResponse_Value{
-				ModelId:       modelID,
-				TotalRequests: v,
+				ModelId:               modelID,
+				TotalRequests:         totalRequests,
+				TotalPromptTokens:     ttotalPromptTokens,
+				TotalCompletionTokens: totalCompletionTokens,
 			})
 		}
 

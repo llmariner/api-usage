@@ -24,42 +24,54 @@ func TestListModelUsageSummaries(t *testing.T) {
 
 	usages := []*store.Usage{
 		{
-			Tenant:    defaultTenantID,
-			ModelID:   "model0",
-			UserID:    "user0",
-			Timestamp: startTime.UnixNano(),
+			Tenant:           defaultTenantID,
+			ModelID:          "model0",
+			UserID:           "user0",
+			Timestamp:        startTime.UnixNano(),
+			PromptTokens:     1,
+			CompletionTokens: 2,
 		},
 		// different model
 		{
-			Tenant:    defaultTenantID,
-			ModelID:   "model1",
-			UserID:    "user0",
-			Timestamp: startTime.Add(10 * time.Minute).UnixNano(),
+			Tenant:           defaultTenantID,
+			ModelID:          "model1",
+			UserID:           "user0",
+			Timestamp:        startTime.Add(10 * time.Minute).UnixNano(),
+			PromptTokens:     1,
+			CompletionTokens: 2,
 		},
 		// hidden user
 		{
-			Tenant:    defaultTenantID,
-			ModelID:   "model1",
-			UserID:    "user1",
-			Timestamp: startTime.Add(20 * time.Minute).UnixNano(),
+			Tenant:           defaultTenantID,
+			ModelID:          "model1",
+			UserID:           "user1",
+			Timestamp:        startTime.Add(20 * time.Minute).UnixNano(),
+			PromptTokens:     1,
+			CompletionTokens: 2,
 		},
 		{
-			Tenant:    defaultTenantID,
-			ModelID:   "model0",
-			UserID:    "user0",
-			Timestamp: startTime.Add(1*time.Hour + 1*time.Minute).UnixNano(),
+			Tenant:           defaultTenantID,
+			ModelID:          "model0",
+			UserID:           "user0",
+			Timestamp:        startTime.Add(1*time.Hour + 1*time.Minute).UnixNano(),
+			PromptTokens:     1,
+			CompletionTokens: 2,
 		},
 		{
-			Tenant:    defaultTenantID,
-			ModelID:   "model0",
-			UserID:    "user0",
-			Timestamp: startTime.Add(1*time.Hour + 30*time.Minute).UnixNano(),
+			Tenant:           defaultTenantID,
+			ModelID:          "model0",
+			UserID:           "user0",
+			Timestamp:        startTime.Add(1*time.Hour + 30*time.Minute).UnixNano(),
+			PromptTokens:     1,
+			CompletionTokens: 2,
 		},
 		{
-			Tenant:    defaultTenantID,
-			ModelID:   "model0",
-			UserID:    "user0",
-			Timestamp: startTime.Add(2*time.Hour + 10*time.Minute).UnixNano(),
+			Tenant:           defaultTenantID,
+			ModelID:          "model0",
+			UserID:           "user0",
+			Timestamp:        startTime.Add(2*time.Hour + 10*time.Minute).UnixNano(),
+			PromptTokens:     1,
+			CompletionTokens: 2,
 		},
 	}
 	err := store.CreateUsage(st.DB(), usages...)
@@ -96,12 +108,16 @@ func TestListModelUsageSummaries(t *testing.T) {
 				Timestamp: startTime.Unix(),
 				Values: []*v1.ListModelUsageSummariesResponse_Value{
 					{
-						ModelId:       "model0",
-						TotalRequests: 1,
+						ModelId:               "model0",
+						TotalRequests:         1,
+						TotalPromptTokens:     1,
+						TotalCompletionTokens: 2,
 					},
 					{
-						ModelId:       "model1",
-						TotalRequests: 1,
+						ModelId:               "model1",
+						TotalRequests:         1,
+						TotalPromptTokens:     1,
+						TotalCompletionTokens: 2,
 					},
 				},
 			},
@@ -109,8 +125,10 @@ func TestListModelUsageSummaries(t *testing.T) {
 				Timestamp: startTime.Add(1 * time.Hour).Unix(),
 				Values: []*v1.ListModelUsageSummariesResponse_Value{
 					{
-						ModelId:       "model0",
-						TotalRequests: 2,
+						ModelId:               "model0",
+						TotalRequests:         2,
+						TotalPromptTokens:     2,
+						TotalCompletionTokens: 4,
 					},
 					{
 						ModelId:       "model1",
@@ -122,8 +140,10 @@ func TestListModelUsageSummaries(t *testing.T) {
 				Timestamp: startTime.Add(2 * time.Hour).Unix(),
 				Values: []*v1.ListModelUsageSummariesResponse_Value{
 					{
-						ModelId:       "model0",
-						TotalRequests: 1,
+						ModelId:               "model0",
+						TotalRequests:         1,
+						TotalPromptTokens:     1,
+						TotalCompletionTokens: 2,
 					},
 					{
 						ModelId:       "model1",

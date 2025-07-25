@@ -42,7 +42,9 @@ type ModelUsageSummary struct {
 
 	TruncatedTimestamp int64
 
-	TotalRequests int64
+	TotalRequests         int64
+	TotalPromptTokens     int64
+	TotalCompletionTokens int64
 }
 
 // ListModelUsageSummaries returns the usage summaries for models grouped by user and truncated by the specified interval.
@@ -61,6 +63,8 @@ func ListModelUsageSummaries(
 			// Truncate by interval
 			fmt.Sprintf("timestamp / %d * %d AS truncated_timestamp", interval.Nanoseconds(), interval.Nanoseconds()),
 			"COUNT(*) AS total_requests",
+			"SUM(prompt_tokens) AS total_prompt_tokens",
+			"SUM(completion_tokens) AS total_completion_tokens",
 		).
 		Where("tenant = ?", tenantID).
 		Where("model_id != ''"). // Exclude non-model related usage

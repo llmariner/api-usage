@@ -71,6 +71,8 @@ export type ListModelUsageSummariesRequest = {
 export type ListModelUsageSummariesResponseValue = {
     model_id?: string;
     total_requests?: string;
+    total_prompt_tokens?: string;
+    total_completion_tokens?: string;
 };
 export type ListModelUsageSummariesResponseDatapoint = {
     timestamp?: string;
