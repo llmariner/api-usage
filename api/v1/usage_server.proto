@@ -116,6 +116,8 @@ message ListModelUsageSummariesResponse {
     string model_id = 1;
 
     int64 total_requests = 2;
+    int64 total_prompt_tokens = 3;
+    int64 total_completion_tokens = 4;
   }
 
   message Datapoint {
