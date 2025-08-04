@@ -18,7 +18,7 @@ message GetAggregatedSummaryRequest {
   string tenant_id = 1;
 
   // star_time is the UNIX timestamp for the summary start time (inclusive).
-  // If start_time is not provided, the default is the 24 hours before end_time.
+  // If start_time is not provided, the default is the 31 days before end_time.
   int64 start_time = 2;
   // end_time is the UNIX timestamp for the summary end time (exclusive).
   // If end_time is not provided, the default is the current time.
