@@ -85,7 +85,7 @@ type GetAggregatedSummaryRequest struct {
 
 	TenantId string `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	// star_time is the UNIX timestamp for the summary start time (inclusive).
-	// If start_time is not provided, the default is the 24 hours before end_time.
+	// If start_time is not provided, the default is the 31 days before end_time.
 	StartTime int64 `protobuf:"varint,2,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
 	// end_time is the UNIX timestamp for the summary end time (exclusive).
 	// If end_time is not provided, the default is the current time.

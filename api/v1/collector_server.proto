@@ -21,7 +21,11 @@ message UsageRecord {
 
   UsageDetails details = 9;
 
-  // Next ID: 11
+  // This measures the model's internal processing time, excluding network latency
+  // (i.e., time between inference-manager-engine and inference runtime).
+  int32 runtime_latency_ms = 11;
+
+  // Next ID: 12
 }
 
 message UsageDetails {
@@ -40,6 +44,11 @@ message CreateChatCompletion {
   int32 prompt_tokens = 3;
   // The number of tokens in the completion.
   int32 completion_tokens = 4;
+
+  // How quickly users start seeing the model's output after entering their query.
+  // This measures the model's internal processing time, excluding network latency
+  // (i.e., time between inference-manager-engine and inference runtime).
+  int32 runtime_time_to_first_token_ms = 5;
 }
 
 message CreateCompletion {
@@ -50,6 +59,11 @@ message CreateCompletion {
   int32 prompt_tokens = 3;
   // The number of tokens in the completion.
   int32 completion_tokens = 4;
+
+  // How quickly users start seeing the model's output after entering their query.
+  // This measures the model's internal processing time, excluding network latency
+  // (i.e., time between inference-manager-engine and inference runtime).
+  int32 runtime_time_to_first_token_ms = 5;
 }
 
 message CreateAudioTranscription {
@@ -66,6 +80,11 @@ message CreateAudioTranscription {
   int32 audio_tokens = 7;
 
   double input_duration_seconds = 8;
+
+  // How quickly users start seeing the model's output after entering their query.
+  // This measures the model's internal processing time, excluding network latency
+  // (i.e., time between inference-manager-engine and inference runtime).
+  int32 runtime_time_to_first_token_ms = 9;
 }
 
 message CreateUsageRequest {

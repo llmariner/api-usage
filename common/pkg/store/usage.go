@@ -24,6 +24,9 @@ type Usage struct {
 	TimeToFirstTokenMS int32
 	PromptTokens       int32
 	CompletionTokens   int32
+
+	RuntimeLatencyMS          int32
+	RuntimeTimeToFirstTokenMS int32
 }
 
 // CreateUsage creates a new usage.

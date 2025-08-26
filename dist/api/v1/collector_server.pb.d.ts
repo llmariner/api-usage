@@ -18,6 +18,7 @@ export type UsageRecord = {
     timestamp?: string;
     latency_ms?: number;
     details?: UsageDetails;
+    runtime_latency_ms?: number;
 };
 type BaseUsageDetails = {};
 export type UsageDetails = BaseUsageDetails & OneOf<{
@@ -30,12 +31,14 @@ export type CreateChatCompletion = {
     time_to_first_token_ms?: number;
     prompt_tokens?: number;
     completion_tokens?: number;
+    runtime_time_to_first_token_ms?: number;
 };
 export type CreateCompletion = {
     model_id?: string;
     time_to_first_token_ms?: number;
     prompt_tokens?: number;
     completion_tokens?: number;
+    runtime_time_to_first_token_ms?: number;
 };
 export type CreateAudioTranscription = {
     model_id?: string;
@@ -46,6 +49,7 @@ export type CreateAudioTranscription = {
     text_tokens?: number;
     audio_tokens?: number;
     input_duration_seconds?: number;
+    runtime_time_to_first_token_ms?: number;
 };
 export type CreateUsageRequest = {
     records?: UsageRecord[];

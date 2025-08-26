@@ -78,6 +78,11 @@
         "inputDurationSeconds": {
           "type": "number",
           "format": "double"
+        },
+        "runtimeTimeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query.\nThis measures the model's internal processing time, excluding network latency\n(i.e., time between inference-manager-engine and inference runtime)."
         }
       }
     },
@@ -101,6 +106,11 @@
           "type": "integer",
           "format": "int32",
           "description": "The number of tokens in the completion."
+        },
+        "runtimeTimeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query.\nThis measures the model's internal processing time, excluding network latency\n(i.e., time between inference-manager-engine and inference runtime)."
         }
       }
     },
@@ -124,6 +134,11 @@
           "type": "integer",
           "format": "int32",
           "description": "The number of tokens in the completion."
+        },
+        "runtimeTimeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query.\nThis measures the model's internal processing time, excluding network latency\n(i.e., time between inference-manager-engine and inference runtime)."
         }
       }
     },
@@ -180,6 +195,11 @@
         },
         "details": {
           "$ref": "#/definitions/v1UsageDetails"
+        },
+        "runtimeLatencyMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "This measures the model's internal processing time, excluding network latency\n(i.e., time between inference-manager-engine and inference runtime)."
         }
       }
     }
