@@ -68,6 +68,8 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 			timeToFirstTokenMS int32
 			promptTokens       int32
 			completionTokens   int32
+
+			runtimeTimeToFirstTokenMS int32
 		)
 
 		if d := r.Details; d != nil {
@@ -78,18 +80,21 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 				timeToFirstTokenMS = c.TimeToFirstTokenMs
 				promptTokens = c.PromptTokens
 				completionTokens = c.CompletionTokens
+				runtimeTimeToFirstTokenMS = c.RuntimeTimeToFirstTokenMs
 			case *v1.UsageDetails_CreateCompletion:
 				c := d.GetCreateCompletion()
 				modelID = c.ModelId
 				timeToFirstTokenMS = c.TimeToFirstTokenMs
 				promptTokens = c.PromptTokens
 				completionTokens = c.CompletionTokens
+				runtimeTimeToFirstTokenMS = c.RuntimeTimeToFirstTokenMs
 			case *v1.UsageDetails_CreateAudioTranscription:
 				c := d.GetCreateAudioTranscription()
 				modelID = c.ModelId
 				timeToFirstTokenMS = c.TimeToFirstTokenMs
 				promptTokens = c.InputTokens
 				completionTokens = c.OutputTokens
+				runtimeTimeToFirstTokenMS = c.RuntimeTimeToFirstTokenMs
 			default:
 				return nil, status.Errorf(codes.InvalidArgument, "invalid details")
 			}
@@ -110,6 +115,9 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 			TimeToFirstTokenMS: timeToFirstTokenMS,
 			PromptTokens:       promptTokens,
 			CompletionTokens:   completionTokens,
+
+			RuntimeLatencyMS:          r.RuntimeLatencyMs,
+			RuntimeTimeToFirstTokenMS: runtimeTimeToFirstTokenMS,
 		})
 	}
 	if err := store.CreateUsage(s.store.DB(), records...); err != nil {

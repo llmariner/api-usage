@@ -25,6 +25,7 @@ export type UsageRecord = {
   timestamp?: string
   latency_ms?: number
   details?: UsageDetails
+  runtime_latency_ms?: number
 }
 
 
@@ -39,6 +40,7 @@ export type CreateChatCompletion = {
   time_to_first_token_ms?: number
   prompt_tokens?: number
   completion_tokens?: number
+  runtime_time_to_first_token_ms?: number
 }
 
 export type CreateCompletion = {
@@ -46,6 +48,7 @@ export type CreateCompletion = {
   time_to_first_token_ms?: number
   prompt_tokens?: number
   completion_tokens?: number
+  runtime_time_to_first_token_ms?: number
 }
 
 export type CreateAudioTranscription = {
@@ -57,6 +60,7 @@ export type CreateAudioTranscription = {
   text_tokens?: number
   audio_tokens?: number
   input_duration_seconds?: number
+  runtime_time_to_first_token_ms?: number
 }
 
 export type CreateUsageRequest = {
