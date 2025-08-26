@@ -33,6 +33,7 @@ message UsageDetails {
     CreateChatCompletion create_chat_completion = 1;
     CreateCompletion create_completion = 2;
     CreateAudioTranscription create_audio_transcription = 3;
+    CreateModelResponse create_model_response = 4;
   }
 }
 
@@ -85,6 +86,20 @@ message CreateAudioTranscription {
   // This measures the model's internal processing time, excluding network latency
   // (i.e., time between inference-manager-engine and inference runtime).
   int32 runtime_time_to_first_token_ms = 9;
+}
+
+message CreateModelResponse {
+  string model_id = 1;
+
+  // How quickly users start seeing the model's output after entering their query.
+  int32 time_to_first_token_ms = 2;
+
+  // How quickly users start seeing the model's output after entering their query.
+  // This measures the model's internal processing time, excluding network latency
+  // (i.e., time between inference-manager-engine and inference runtime).
+  int32 runtime_time_to_first_token_ms = 3;
+
+  // TODO(kenji): Add more.
 }
 
 message CreateUsageRequest {

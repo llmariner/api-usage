@@ -142,6 +142,24 @@
         }
       }
     },
+    "v1CreateModelResponse": {
+      "type": "object",
+      "properties": {
+        "modelId": {
+          "type": "string"
+        },
+        "timeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query."
+        },
+        "runtimeTimeToFirstTokenMs": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How quickly users start seeing the model's output after entering their query.\nThis measures the model's internal processing time, excluding network latency\n(i.e., time between inference-manager-engine and inference runtime)."
+        }
+      }
+    },
     "v1Usage": {
       "type": "object"
     },
@@ -156,6 +174,9 @@
         },
         "createAudioTranscription": {
           "$ref": "#/definitions/v1CreateAudioTranscription"
+        },
+        "createModelResponse": {
+          "$ref": "#/definitions/v1CreateModelResponse"
         }
       }
     },
