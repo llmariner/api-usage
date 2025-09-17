@@ -34,6 +34,7 @@ message UsageDetails {
     CreateCompletion create_completion = 2;
     CreateAudioTranscription create_audio_transcription = 3;
     CreateModelResponse create_model_response = 4;
+    Tokenize tokenize = 5;
   }
 }
 
@@ -100,6 +101,10 @@ message CreateModelResponse {
   int32 runtime_time_to_first_token_ms = 3;
 
   // TODO(kenji): Add more.
+}
+
+message Tokenize {
+  string model_id = 1;
 }
 
 message CreateUsageRequest {

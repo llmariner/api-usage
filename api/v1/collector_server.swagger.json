@@ -160,6 +160,14 @@
         }
       }
     },
+    "v1Tokenize": {
+      "type": "object",
+      "properties": {
+        "modelId": {
+          "type": "string"
+        }
+      }
+    },
     "v1Usage": {
       "type": "object"
     },
@@ -177,6 +185,9 @@
         },
         "createModelResponse": {
           "$ref": "#/definitions/v1CreateModelResponse"
+        },
+        "tokenize": {
+          "$ref": "#/definitions/v1Tokenize"
         }
       }
     },
