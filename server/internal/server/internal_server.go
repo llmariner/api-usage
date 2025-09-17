@@ -95,6 +95,10 @@ func (s *InternalServer) CreateUsage(ctx context.Context, req *v1.CreateUsageReq
 				promptTokens = c.InputTokens
 				completionTokens = c.OutputTokens
 				runtimeTimeToFirstTokenMS = c.RuntimeTimeToFirstTokenMs
+			case *v1.UsageDetails_Tokenize:
+				c := d.GetTokenize()
+				modelID = c.ModelId
+				// No other fields are applicable.
 			default:
 				return nil, status.Errorf(codes.InvalidArgument, "invalid details")
 			}
