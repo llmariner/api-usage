@@ -159,7 +159,7 @@ func TestListModelUsageSummaries(t *testing.T) {
 
 	startTime := ts
 	endTime := ts.Add(24 * time.Hour)
-	got, err := ListModelUsageSummaries(st, "t0", startTime, endTime, time.Hour)
+	got, err := ListModelUsageSummaries(st, "t0", startTime, endTime, time.Hour, 0)
 	assert.NoError(t, err)
 
 	want := []*ModelUsageSummary{
@@ -205,4 +205,89 @@ func TestListModelUsageSummaries(t *testing.T) {
 		},
 	}
 	assert.ElementsMatch(t, want, got)
+}
+
+func TestListModelUsageSummaries_StatusCode(t *testing.T) {
+	st, tearDown := store.NewTest(t)
+	defer tearDown()
+
+	ts := time.Date(2025, 7, 10, 0, 0, 0, 0, time.UTC)
+	usages := []*store.Usage{
+		{
+			Tenant:     "t0",
+			ModelID:    "model0",
+			UserID:     "user0",
+			Timestamp:  ts.UnixNano(),
+			StatusCode: 200,
+		},
+		{
+			Tenant:     "t0",
+			ModelID:    "model1",
+			UserID:     "user0",
+			Timestamp:  ts.Add(time.Second).UnixNano(),
+			StatusCode: 403,
+		},
+	}
+	err := store.CreateUsage(st.DB(), usages...)
+	assert.NoError(t, err)
+
+	tcs := []struct {
+		name       string
+		statusCode int32
+		want       []*ModelUsageSummary
+	}{
+		{
+			name:       "all status codes",
+			statusCode: 0,
+			want: []*ModelUsageSummary{
+				{
+					ModelID:            "model0",
+					UserID:             "user0",
+					TruncatedTimestamp: ts.UnixNano(),
+					TotalRequests:      1,
+				},
+				{
+					ModelID:            "model1",
+					UserID:             "user0",
+					TruncatedTimestamp: ts.UnixNano(),
+					TotalRequests:      1,
+				},
+			},
+		},
+		{
+			name:       "only 200",
+			statusCode: 200,
+			want: []*ModelUsageSummary{
+				{
+					ModelID:            "model0",
+					UserID:             "user0",
+					TruncatedTimestamp: ts.UnixNano(),
+					TotalRequests:      1,
+				},
+			},
+		},
+		{
+			name:       "only 403",
+			statusCode: 403,
+			want: []*ModelUsageSummary{
+				{
+					ModelID:            "model1",
+					UserID:             "user0",
+					TruncatedTimestamp: ts.UnixNano(),
+					TotalRequests:      1,
+				},
+			},
+		},
+	}
+
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			startTime := ts
+			endTime := ts.Add(24 * time.Hour)
+			got, err := ListModelUsageSummaries(st, "t0", startTime, endTime, time.Hour, tc.statusCode)
+			assert.NoError(t, err)
+			assert.ElementsMatch(t, tc.want, got)
+		})
+	}
+
 }

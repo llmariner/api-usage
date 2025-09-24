@@ -51,6 +51,13 @@
             "format": "int64"
           },
           {
+            "name": "filter.statusCode",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
             "name": "intervalSec",
             "description": "interval_sec is the aggregation interval in seconds. Default is 3600 (1 hour).",
             "in": "query",
@@ -234,6 +241,10 @@
           "type": "string",
           "format": "int64",
           "description": "end_timestamp specifies the end time of the snapshot histories (exclusive). Unix timestamp in seconds."
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
