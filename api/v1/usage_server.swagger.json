@@ -49,6 +49,14 @@
             "required": false,
             "type": "string",
             "format": "int64"
+          },
+          {
+            "name": "intervalSec",
+            "description": "interval_sec is the aggregation interval in seconds. Default is 3600 (1 hour).",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [

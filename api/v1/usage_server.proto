@@ -109,6 +109,8 @@ message ListUsageDataResponse {
 
 message ListModelUsageSummariesRequest {
   RequestFilter filter = 1;
+  // interval_sec is the aggregation interval in seconds. Default is 3600 (1 hour).
+  int32 interval_sec = 2;
 }
 
 message ListModelUsageSummariesResponse {
