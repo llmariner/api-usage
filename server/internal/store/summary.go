@@ -54,9 +54,10 @@ func ListModelUsageSummaries(
 	startTime,
 	endTime time.Time,
 	interval time.Duration,
+	statusCode int32,
 ) ([]*ModelUsageSummary, error) {
 	var us []*ModelUsageSummary
-	if err := s.DB().Model(&store.Usage{}).
+	q := s.DB().Model(&store.Usage{}).
 		Select(
 			"model_id",
 			"user_id",
@@ -68,7 +69,13 @@ func ListModelUsageSummaries(
 		).
 		Where("tenant = ?", tenantID).
 		Where("model_id != ''"). // Exclude non-model related usage
-		Where("timestamp >= ? AND timestamp < ?", startTime.UnixNano(), endTime.UnixNano()).
+		Where("timestamp >= ? AND timestamp < ?", startTime.UnixNano(), endTime.UnixNano())
+
+	if statusCode != 0 {
+		q = q.Where("status_code = ?", statusCode)
+	}
+
+	if err := q.
 		Group("user_id, model_id, truncated_timestamp").
 		Scan(&us).Error; err != nil {
 		return nil, err

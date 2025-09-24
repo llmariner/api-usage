@@ -12,6 +12,8 @@ message RequestFilter {
   int64 start_timestamp = 1;
   // end_timestamp specifies the end time of the snapshot histories (exclusive). Unix timestamp in seconds.
   int64 end_timestamp = 2;
+
+  int32 status_code = 3;
 }
 
 message GetAggregatedSummaryRequest {

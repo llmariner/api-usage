@@ -8,6 +8,7 @@ import * as fm from "../../fetch.pb"
 export type RequestFilter = {
   start_timestamp?: string
   end_timestamp?: string
+  status_code?: number
 }
 
 export type GetAggregatedSummaryRequest = {

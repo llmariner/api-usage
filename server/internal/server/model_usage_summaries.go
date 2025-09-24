@@ -38,12 +38,18 @@ func (s *Server) ListModelUsageSummaries(ctx context.Context, req *v1.ListModelU
 		return nil, err
 	}
 
+	var statusCode int32
+	if req.Filter != nil {
+		statusCode = req.Filter.StatusCode
+	}
+
 	summaries, err := store.ListModelUsageSummaries(
 		s.store,
 		userInfo.TenantID,
 		startTime,
 		endTime,
 		interval,
+		statusCode,
 	)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list model usage summaries: %s", err)
