@@ -84,6 +84,7 @@ export type ListUsageDataResponse = {
 
 export type ListModelUsageSummariesRequest = {
   filter?: RequestFilter
+  interval_sec?: number
 }
 
 export type ListModelUsageSummariesResponseValue = {

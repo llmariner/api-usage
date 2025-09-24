@@ -25,6 +25,14 @@ func (s *Server) ListModelUsageSummaries(ctx context.Context, req *v1.ListModelU
 		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
+	if req.IntervalSec < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "intervalSec must be a positive value")
+	}
+	interval := defaultInterval
+	if req.IntervalSec > 0 {
+		interval = time.Duration(req.IntervalSec) * time.Second
+	}
+
 	startTime, endTime, err := getStartEndTime(req.Filter, time.Now(), defaultDuration)
 	if err != nil {
 		return nil, err
@@ -35,7 +43,7 @@ func (s *Server) ListModelUsageSummaries(ctx context.Context, req *v1.ListModelU
 		userInfo.TenantID,
 		startTime,
 		endTime,
-		defaultInterval,
+		interval,
 	)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list model usage summaries: %s", err)
@@ -68,7 +76,7 @@ func (s *Server) ListModelUsageSummaries(ctx context.Context, req *v1.ListModelU
 	}
 
 	var dps []*v1.ListModelUsageSummariesResponse_Datapoint
-	for t := startTime; t.Before(endTime); t = t.Add(defaultInterval) {
+	for t := startTime; t.Before(endTime); t = t.Add(interval) {
 		sums := intervalBuckets[t.UnixNano()]
 		var vs []*v1.ListModelUsageSummariesResponse_Value
 		for _, modelID := range modelIDs {
